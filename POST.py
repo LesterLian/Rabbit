@@ -5,6 +5,7 @@ import requests
 import collections
 import global_var as gv
 
+
 post_format = {"login": {"phone", "pwd"}}
 
 
@@ -33,11 +34,19 @@ def make_data(dic_string):
     return re
 
 
+def post(user, command):
+    site = global_var.site
+    url = 'http://' + site + '/HappyRabbit/message/' + command
+    log_data = make_data(get_info(user, command))
+    r = requests.post(url, data=log_data)
+    print(r.text)
+
 # def json2dic(json, *keys):
 #     dic = collections.OrderedDict()
 #     for key in keys:
 #         if key in json.keys():
 #             dic['key'] = json['key']
 #         else:
-            for json_key in json.keys():
-                if
+#             for json_key in json.keys():
+#                 if
+
