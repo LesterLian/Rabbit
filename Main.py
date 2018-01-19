@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+# @Time    : 19/01/2018 9:05 AM
+# @Author  : Lian
 import Control
+import global_var as gv
 
-infoList = {{}}  # Should be passed in by UI
+# Should be passed in by UI
 if __name__ == '__main__':
-    Control.init(infoList)
+    Control.init(gv.passport_list)

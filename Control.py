@@ -1,7 +1,13 @@
+# -*- coding: utf-8 -*-
+# @Time    : 19/01/2018 9:05 AM
+# @Author  : Lian
 import POST
+import global_var as gv
+
 userList = dict()
-tasks = {"login", "getRatio", "getFieldInfo"}
-# , "getFieldEggs", "getFieldInfo", "getHatchCount", "hatchField", "getFieldInfo"
+tasks = gv.tasks
+
+
 
 
 def init(user_info):
