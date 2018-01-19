@@ -108,6 +108,7 @@ venv.bak/
 .gitignore
 .idea/
 global_var.py
-/global_var.py
 !/.gitignore
-/akio/
+
+/cmd/
+
