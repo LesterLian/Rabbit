@@ -2,19 +2,24 @@
 # @Author  : Lester
 
 #import POST
-from post import PostLogin, manager
+from post.PostLogin import PostLogin
+from post.manager import Manager
 import global_var as gv
 
 userList = dict()
 tasks = gv.tasks
-mng = manager.Manager()
+mng = Manager()
 
 
 def init(user_info):
     for info in user_info:
         userList[info[0]] = {"phone": info[0], "pwd": info[1]}
 
-    mng.register(name="login", post_proto=PostLogin.PostLogin(gv.passport_dic, 'token'))
+    for command in gv.fields_dict:
+        mng.register(command, PostLogin(command, *gv.fields_dict[command]))
+    # mng.register(name="login", post_proto=PostLogin(['phone', 'pwd'], 'token', 'userId'))
+    # mng.register(name='getRatio', post_proto=PostLogin(['userId', 'token']))
+
 
 
 def add_user(phone, pwd):
@@ -25,7 +30,8 @@ def process():
     for user in userList:
         for command in tasks:
             executor = mng.create(command)
-            executor.run()
+            executor.run(userList[user])
+            userList[user].update(executor.get_response_dic())
             print(executor.get_response_dic())
 
             print(userList[user])
