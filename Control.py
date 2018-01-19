@@ -8,8 +8,6 @@ userList = dict()
 tasks = gv.tasks
 
 
-
-
 def init(user_info):
     for info in user_info:
         userList[info[0]] = info[1]

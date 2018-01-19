@@ -31,3 +31,13 @@ def make_data(dic_string):
         'data': dic_string
     }
     return re
+
+
+# def json2dic(json, *keys):
+#     dic = collections.OrderedDict()
+#     for key in keys:
+#         if key in json.keys():
+#             dic['key'] = json['key']
+#         else:
+            for json_key in json.keys():
+                if
