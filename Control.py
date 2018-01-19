@@ -20,4 +20,5 @@ def add_user(phone, pwd):
 def process():
     for user in userList:
         for command in tasks:
-            POST.post(userList[user], command)
+            userList[user].update(POST.post(userList[user], command))
+            print(userList[user])
