@@ -110,3 +110,4 @@ venv.bak/
 global_var.py
 /global_var.py
 !/.gitignore
+/akio/

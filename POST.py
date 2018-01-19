@@ -35,7 +35,7 @@ def make_data(dic_string):
 
 
 def post(user, command):
-    site = global_var.site
+    site = gv.site
     url = 'http://' + site + '/HappyRabbit/message/' + command
     log_data = make_data(get_info(user, command))
     r = requests.post(url, data=log_data)
