@@ -2,11 +2,16 @@
 # @Time    : 18/01/2018 3:38 PM
 # @Author  : Akio
 import requests
-import collections
+import json
 import global_var as gv
 
 
-post_format = {"login": {"phone", "pwd"}}
+post_format = {"login": ["phone", "pwd"],
+               "getRatio": ["userId", "token"]
+               }
+return_format = {"login": [["user", "userId"], "token"],
+                 "getRatio": []
+                 }
 
 
 def get_info(user, command):
@@ -38,8 +43,20 @@ def post(user, command):
     site = gv.site
     url = 'http://' + site + '/HappyRabbit/message/' + command
     log_data = make_data(get_info(user, command))
-    r = requests.post(url, data=log_data)
-    print(r.text)
+    response = requests.post(url, data=log_data)
+    r_obj = json.loads(response.text)
+    re = dict()
+
+    if r_obj["success"] == "0":
+        return re
+
+    for field in return_format[command]:
+        if isinstance(field, list):
+            re[field[1]] = r_obj[field[0]][field[1]]
+        else:
+            re[field] = r_obj[field]
+    print(response.text)
+    return re
 
 # def json2dic(json, *keys):
 #     dic = collections.OrderedDict()
