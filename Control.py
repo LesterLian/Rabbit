@@ -30,8 +30,9 @@ def process():
     for user in userList:
         for command in tasks:
             executor = mng.create(command)
+            executor.set_info(tasks[command])
             executor.run(userList[user])
             userList[user].update(executor.get_response_dic())
-            print(executor.get_response_dic())
 
+            print(executor.get_response_dic())
             print(userList[user])

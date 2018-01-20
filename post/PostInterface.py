@@ -11,10 +11,14 @@ class PostInterface:
     def __init__(self, command, field_list, *find_keys):
         self.command = command
         self.field_list = field_list  # list contains field names needed for POST
+        self.info_dict = dict()
         self.get_keys = find_keys
         self.response_json = None
         self.response_dic = {}
         self.tmp_dic = {}
+
+    def set_info(self, info_dict):
+        self.info_dict = info_dict
 
     def run(self, user_info_dict):
         self.set_post_url()
@@ -24,6 +28,7 @@ class PostInterface:
 
     def post(self, user_info_dict):  # adds a variable to make interface general for multiple users
         url = gv.url + self.command  # changed to receive command instead
+        user_info_dict.update(self.info_dict)
         data = self.make_data(self.warp_dic({k: user_info_dict[k] for k in self.field_list}))
         self.response_json = requests.post(url, data=data, headers=gv.headers).json()
 
