@@ -8,23 +8,28 @@ from abc import abstractmethod
 
 
 class PostInterface:
-    def __init__(self, info_dic, *find_keys):
-        self.post_url = ""
-        self.info_dic = info_dic
+    def __init__(self, command, field_list, *find_keys):
+        self.command = command
+        self.field_list = field_list  # list contains field names needed for POST
+        self.info_dict = dict()
         self.get_keys = find_keys
         self.response_json = None
         self.response_dic = {}
         self.tmp_dic = {}
 
-    def run(self):
+    def set_info(self, info_dict):
+        self.info_dict = info_dict
+
+    def run(self, user_info_dict):
         self.set_post_url()
-        self.post()
+        self.post(user_info_dict)
         self.make_response_dic()
         print(self.tmp_dic)
 
-    def post(self):
-        url = gv.url + self.post_url
-        data = self.make_data(self.warp_dic(self.info_dic))
+    def post(self, user_info_dict):  # adds a variable to make interface general for multiple users
+        url = gv.url + self.command  # changed to receive command instead
+        user_info_dict.update(self.info_dict)
+        data = self.make_data(self.warp_dic({k: user_info_dict[k] for k in self.field_list}))
         self.response_json = requests.post(url, data=data, headers=gv.headers).json()
 
     @staticmethod
@@ -51,7 +56,7 @@ class PostInterface:
         for find_key in self.get_keys:
             self.response_dic[find_key] = self.tmp_dic[find_key]
 
-    def json2dic(self, json):
+    def json2dic(self, json):  # TODO puts repeated info into set instead of updating them.
         for key, val in json.items():
             if isinstance(val, dict):
                 self.json2dic(val)
