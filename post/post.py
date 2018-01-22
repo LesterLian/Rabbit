@@ -17,9 +17,10 @@ class Post:
         self.response_json = None
         self.response_dic = {}
         self.tmp_dic = {}
+        self.success = True
 
     def set_info(self, user):
-        #self.info_dict = info_dict
+        # self.info_dict = info_dict
         self.info_dict = strategies.get_extra_keys(self.command, user)
 
     def run(self, user):
@@ -40,7 +41,8 @@ class Post:
         data = self.make_data(self.warp_dic(ordered_dict))
 
         self.response_json = requests.post(url, data=data, headers=gv.headers).json()
-
+        # ximi
+        self.success = self.response_json['success'] == '1'
         return self.response_json['success'] == '0'
 
     @staticmethod

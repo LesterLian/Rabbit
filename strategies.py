@@ -19,4 +19,3 @@ def get_extra_keys(command, user):
         if user.find('hasEgg') == '1':
 
     elif command == 'hatchField':
-

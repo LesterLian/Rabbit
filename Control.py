@@ -13,7 +13,7 @@ mng = Manager()
 
 def init(user_info):
     for info in user_info:
-        #userDict[info[0]] = {"phone": info[0], "pwd": info[1]}
+        # userDict[info[0]] = {"phone": info[0], "pwd": info[1]}
         add_user(info[0], info[1])
 
     for command in gv.post_init_dict:
