@@ -9,9 +9,10 @@ class Director:
         self.user = user
         self.next_step = 'login'
         self.wrong_num = 0
+        self.tag = False
 
     def run(self):
-        while self.wrong_num < 3:
+        while not (self.tag and self.wrong_num < 3):
             self.do_post()
 
     def do_post(self):
@@ -25,6 +26,7 @@ class Director:
         post_dict['phone'] = self.user.data['phone']
         post_dict['pwd'] = self.user.data['pwd']
         post_obj = Post('login', post_dict, 'userId', 'token')
+        post_obj.run()
         if post_obj.success == '1':
             response_dic = post_obj.get_response_dic()
             self.user.update(response_dic)
@@ -56,3 +58,5 @@ class Director:
                 post_dict['token'] = self.user.data['token']
                 post_obj = Post()# todo 参数
                 if post_obj.success == '1':
+                    pass
+
