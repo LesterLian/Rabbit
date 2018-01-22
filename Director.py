@@ -45,3 +45,14 @@ class Director:
         else:
             self.wrong_num += 1
             self.next_step = 'login'
+
+    def get_field_eggs(self):
+        fields_list = self.user.data['fields']
+        for filed_info in fields_list:
+            if filed_info['hasEgg'] == 1:
+                post_dict = OrderedDict()
+                post_dict['userId'] = self.user.data['userId']
+                post_dict['fieldId'] = filed_info['fieldId']
+                post_dict['token'] = self.user.data['token']
+                post_obj = Post()# todo 参数
+                if post_obj.success == '1':
