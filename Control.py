@@ -1,38 +1,44 @@
 # -*- coding: utf-8 -*-
 # @Author  : Lester
 
-#import POST
-from post.PostLogin import PostLogin
+from post.post import Post
 from post.manager import Manager
+from user import User
 import global_var as gv
 
-userList = dict()
+userDict = dict()
 tasks = gv.tasks
 mng = Manager()
 
 
 def init(user_info):
     for info in user_info:
-        userList[info[0]] = {"phone": info[0], "pwd": info[1]}
+        #userDict[info[0]] = {"phone": info[0], "pwd": info[1]}
+        add_user(info[0], info[1])
 
-    for command in gv.fields_dict:
-        mng.register(command, PostLogin(command, *gv.fields_dict[command]))
+    for command in gv.post_init_dict:
+        mng.register(command, Post(command, *gv.post_init_dict[command]))
     # mng.register(name="login", post_proto=PostLogin(['phone', 'pwd'], 'token', 'userId'))
     # mng.register(name='getRatio', post_proto=PostLogin(['userId', 'token']))
 
 
-
 def add_user(phone, pwd):
-    userList[phone] = {"phone": phone, "pwd": pwd}
+    new_user = User()
+    new_user.update({'phone': phone, 'pwd': pwd})
+    userDict[phone] = new_user
 
 
 def process():
-    for user in userList:
+    for user_phone in userDict:
         for command in tasks:
             executor = mng.create(command)
-            executor.set_info(tasks[command])
-            executor.run(userList[user])
-            userList[user].update(executor.get_response_dic())
+
+            # executor.set_info(tasks[command])
+
+            if executor.run(userDict[user_phone]):  # maybe encapsulate, but how?
+                print("Post Error")
+                return
+            userDict[user_phone].update(executor.get_response_dic())
 
             print(executor.get_response_dic())
-            print(userList[user])
+            print(userDict[user_phone].data)
