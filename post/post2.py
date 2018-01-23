@@ -1,33 +1,48 @@
 # -*- coding: utf-8 -*-
-# @Time    : 23/01/2018 3:20 PM
+# @Time    : 19/01/2018 10:14 AM
 # @Author  : Akio
-from collections import OrderedDict
-import requests
+
 import global_var as gv
+import requests
+import strategies
+from collections import OrderedDict
 
 
 class Post:
-    # post_dict ordered
-    def __init__(self, command, post_dict, *return_keys):
+    def __init__(self, command, post_keys, *return_keys):
         self.command = command
-        self.post_dict = post_dict
+        self.post_keys = post_keys
+        self.info_dict = dict()
         self.return_keys = return_keys
         self.response_json = None
         self.response_dic = {}
         self.tmp_dic = {}
-        self.success = False
+        self.success = True
         self.run()
-    def run(self):
-        # self.set_post_url()
-        self.post()
-        self.make_response_dic()
 
-    def post(self):
+    def set_info(self, user):
+        # self.info_dict = info_dict
+        self.info_dict = strategies.get_extra_keys(self.command, user)
+
+    def run(self, user):
+        # self.set_post_url()
+        self.set_info(user)
+        self.post(user)
+        self.make_response_dic()
+        print(self.tmp_dic)
+
+    def post(self, user):
         url = gv.url + self.command
-        data = self.make_data(self.warp_dic(self.post_dict))
+
+        user_info_dict = user.data.copy()  # don't update original dict
+        user_info_dict.update(self.info_dict)
+        ordered_dict = OrderedDict()
+        for k in self.post_keys:
+            ordered_dict[k] = user_info_dict[k]
+        data = self.make_data(self.warp_dic(ordered_dict))
+
         self.response_json = requests.post(url, data=data, headers=gv.headers).json()
         # ximi
-        # print(self.response_json['success'])
         self.success = self.response_json['success'] == '1'
         return self.response_json['success'] == '0'
 
@@ -52,7 +67,7 @@ class Post:
 
     def make_response_dic(self):
         # 只有当post成功时候才往response_dic里写数据
-        if self.response_json['success'] == '1':
+        if self.tmp_dic['success'] == 1:
             self.json2dic(self.response_json)
             for key in self.return_keys:
                 self.response_dic[key] = self.tmp_dic[key]
