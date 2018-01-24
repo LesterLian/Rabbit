@@ -34,11 +34,7 @@ class Director:
         elif self.next_step == 'end':
             self.tag = True
         # l debug
-<<<<<<< HEAD
-        print(self.user.data)
-=======
         # print(self.user.data)
->>>>>>> 9cb04f037ba2125e6be4eb1adc914db174486f5a
 
     # 登陆
     def login(self):
