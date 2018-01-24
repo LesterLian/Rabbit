@@ -19,7 +19,7 @@ class Director:
         print('run() ends')
 
     def do_post(self):
-        #l debug
+        # l debug
         print(self.next_step)
         if self.next_step == 'login':
             self.login()
@@ -31,7 +31,7 @@ class Director:
             self.hatch_field()
         elif self.next_step == 'end':
             self.tag = True
-        #l debug
+        # l debug
         print(self.user.data)
 
     # 登陆

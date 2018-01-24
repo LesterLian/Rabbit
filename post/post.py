@@ -2,6 +2,7 @@
 # @Time    : 23/01/2018 3:20 PM
 # @Author  : Akio
 from collections import OrderedDict
+from requests import exceptions
 import requests
 import global_var as gv
 
@@ -25,11 +26,13 @@ class Post:
     def post(self):
         url = gv.url + self.command
         data = self.make_data(self.warp_dic(self.post_dict))
-        self.response_json = requests.post(url, data=data, headers=gv.headers).json()
+        try:
+            self.response_json = requests.post(url, data=data, headers=gv.headers).json()
+        except:
+            self.response_json = {'success': '0', 'message': 'POST throws an exception.'}
         # ximi
         # print(self.response_json['success'], self.response_json['message'])
         self.success = self.response_json['success'] == '1'
-        return self.response_json['success'] == '0'
 
     @staticmethod
     def warp_dic(dic_t):
