@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Time    : 22/01/2018 2:39 PM
 # @Author  : Akio
+import time
+
 from post.post import *
 
 
@@ -13,10 +15,13 @@ class Director:
         self.wrong_info = []
 
     def run(self):
-        while not (self.tag and self.wrong_num < 3):
+        while (not self.tag) and self.wrong_num < 3:
             self.do_post()
-        # l debug
-        print('run() ends')
+        self.get_field_info()
+
+    @staticmethod
+    def sleep():
+        time.sleep(0.6)
 
     def do_post(self):
         # l debug
@@ -33,14 +38,15 @@ class Director:
             self.clean_friend()
         elif self.next_step == 'end':
             self.tag = True
+            # self.sleep()
         # l debug
         # print(self.user.data)
 
     # 登陆
     def login(self):
         post_dict = OrderedDict()
-        post_dict['phone'] = self.user.data['phone']
-        post_dict['pwd'] = self.user.data['pwd']
+        post_dict['phone'] = self.user.data.get('phone')
+        post_dict['pwd'] = self.user.data.get('pwd')
         post_obj = Post('login', post_dict, 'userId', 'token')
         if post_obj.success:
             response_dic = post_obj.get_response_dic()
@@ -54,8 +60,8 @@ class Director:
     # 获得利率
     def get_ratio(self):
         post_dict = OrderedDict()
-        post_dict['userId'] = self.user.data['userId']
-        post_dict['token'] = self.user.data['token']
+        post_dict['userId'] = self.user.data.get('userId')
+        post_dict['token'] = self.user.data.get('token')
         post_obj = Post('getRatio', post_dict, 'chickenCount')  # , 'ratios'
         if post_obj.success:
             response_dic = post_obj.get_response_dic()
@@ -74,13 +80,13 @@ class Director:
         for filed_info in fields_list:
             if filed_info['hasEgg'] == '1':
                 post_dict = OrderedDict()
-                post_dict['userId'] = self.user.data['userId']
-                post_dict['fieldId'] = filed_info['id']
-                post_dict['token'] = self.user.data['token']
+                post_dict['userId'] = self.user.data.get('userId')
+                post_dict['fieldId'] = filed_info.get('id')
+                post_dict['token'] = self.user.data.get('token')
                 # 没有数据需要更新到user.data
                 post_obj = Post('getFieldEggs', post_dict)
                 if not post_obj.success:
-                    self.wrong_info.append('getFieldEggs: ' + filed_info['id'])
+                    self.wrong_info.append('getFieldEggs: ' + filed_info.get('id'))
         self.next_step = 'cleanFriend'
 
     # 收好友小兔
@@ -91,13 +97,14 @@ class Director:
                 # 还没被清扫
                 if friend['hasClean'] == '0':
                     post_dict = OrderedDict()
-                    post_dict['userId'] = self.user.data['userId']
-                    post_dict['friendId'] = friend['userId']
-                    post_dict['token'] = self.user.data['token']
+                    post_dict['userId'] = self.user.data.get('userId')
+                    post_dict['friendId'] = friend.get('userId')
+                    post_dict['token'] = self.user.data.get('token')
                     post_obj = Post('cleanFriend', post_dict)
+                    self.sleep()
                     if not post_obj.success:
                         # todo 重写错误信息格式
-                        self.wrong_info.append('clean_friend')
+                        # self.wrong_info.append('clean_friend')
                         print('--------------error--------------')
                         print(post_obj.response_json)
                         print('--------------/error--------------')
@@ -111,8 +118,8 @@ class Director:
     # 获取好友列表
     def get_friend_list(self):
         post_dict = OrderedDict()
-        post_dict['userId'] = self.user.data['userId']
-        post_dict['token'] = self.user.data['token']
+        post_dict['userId'] = self.user.data.get('userId')
+        post_dict['token'] = self.user.data.get('token')
         post_obj = Post('getFriendList', post_dict, 'friends')
         if post_obj.success:
             response_dic = post_obj.get_response_dic()
@@ -130,32 +137,33 @@ class Director:
         egg_count = int(float(self.user.data['eggCount']))
         fields_list = self.user.data['fields']
         for filed_info in fields_list:
-            if filed_info['active'] and egg_count > 0:
+            if egg_count > 0 and filed_info['active']:
                 # 可以孵化位置数量
                 blank_space = max_num - int(filed_info['chickens'])
                 if blank_space > 0:
                     post_dict = OrderedDict()
                     add_count = egg_count if egg_count < blank_space else blank_space
                     egg_count -= add_count
-                    post_dict['userId'] = self.user.data['userId']
-                    post_dict['fieldId'] = filed_info['id']
+                    post_dict['userId'] = self.user.data.get('userId')
+                    post_dict['fieldId'] = filed_info.get('id')
                     post_dict['addCount'] = str(add_count)
-                    post_dict['token'] = self.user.data['token']
+                    post_dict['token'] = self.user.data.get('token')
                     # 没有数据需要更新到user.data
                     post_obj = Post('hatchField', post_dict)
+                    self.sleep()
                     if post_obj.success:
                         egg_count = int(float(self.user.data['eggCount']) - add_count)
                     else:
-                        self.wrong_info.append('hatch_field: ' + filed_info['id'])
+                        self.wrong_info.append('hatch_field: ' + filed_info.get('id'))
         self.next_step = 'end'  # todo 下一步是啥
 
     # 获取/更新 信息
     def get_field_info(self):
         post_dict = OrderedDict()
-        post_dict['userId'] = self.user.data['userId']
+        post_dict['userId'] = self.user.data.get('userId')
         # 暂时不处理好友
         post_dict['friendId'] = ''
-        post_dict['token'] = self.user.data['token']
+        post_dict['token'] = self.user.data.get('token')
         post_obj = Post('getFieldInfo', post_dict, 'chickenCount', 'eggCount', 'fields')
         if post_obj.success:
             response_dic = post_obj.get_response_dic()

@@ -10,6 +10,7 @@ from post.post import *
 def test():
     user = User()
     user.update(gv.passport_dic)
+    # user.update(passport)
     director = Director(user)
     director.run()
     print(director.wrong_info)
@@ -57,3 +58,9 @@ def test_fiend():
 if __name__ == '__main__':
     test()
     # test_fiend()
+    # passport_list = gv.passport_list
+    # for passport in passport_list:
+    #     user = User()
+    #     user.update(passport)
+    #     director = Director(user)
+    #     director.run()
