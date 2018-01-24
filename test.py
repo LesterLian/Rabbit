@@ -4,6 +4,7 @@
 from Director import Director
 from user import User
 import global_var as gv
+from post.post import *
 
 
 def test():
@@ -40,6 +41,22 @@ def test_hatch_field():
     print(user.data, '\n', director.wrong_info)
 
 
+def test_fiend():
+    user = User()
+    user.update(gv.passport_dic)
+    director = Director(user)
+    director.login()
+    test_dict = OrderedDict()
+    test_dict['userId'] = director.user.data['userId']
+    test_dict['friendId'] = '9127a00c-a5a9-444b-8592-284608839a13'
+    test_dict['token'] = director.user.data['token']
+    post_obj = Post('getFieldInfo',
+                    test_dict,
+                    'chickenCount', 'eggCount', 'fields')
+    print(post_obj.response_json)
+    post_obj = Post('cleanFriend',test_dict)
+    print(post_obj.response_json)
+
 if __name__ == '__main__':
     test()
-    # test_get_egg()
+    # test_fiend()
