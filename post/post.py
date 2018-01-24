@@ -27,7 +27,7 @@ class Post:
         data = self.make_data(self.warp_dic(self.post_dict))
         self.response_json = requests.post(url, data=data, headers=gv.headers).json()
         # ximi
-        # print(self.response_json['success'])
+        # print(self.response_json['success'], self.response_json['message'])
         self.success = self.response_json['success'] == '1'
         return self.response_json['success'] == '0'
 

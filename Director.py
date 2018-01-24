@@ -15,8 +15,12 @@ class Director:
     def run(self):
         while not (self.tag and self.wrong_num < 3):
             self.do_post()
+        # l debug
+        print('run() ends')
 
     def do_post(self):
+        #l debug
+        print(self.next_step)
         if self.next_step == 'login':
             self.login()
         elif self.next_step == 'getRatio':
@@ -27,6 +31,8 @@ class Director:
             self.hatch_field()
         elif self.next_step == 'end':
             self.tag = True
+        #l debug
+        print(self.user.data)
 
     # 登陆
     def login(self):
@@ -48,7 +54,7 @@ class Director:
         post_dict = OrderedDict()
         post_dict['userId'] = self.user.data['userId']
         post_dict['token'] = self.user.data['token']
-        post_obj = Post('getRatio', post_dict, 'ratios', 'chickenCount')
+        post_obj = Post('getRatio', post_dict, 'chickenCount')  # , 'ratios'
         if post_obj.success:
             response_dic = post_obj.get_response_dic()
             self.user.update(response_dic)
@@ -64,7 +70,7 @@ class Director:
         self.get_field_info()
         fields_list = self.user.data['fields']
         for filed_info in fields_list:
-            if filed_info['hasEgg'] == 1:
+            if filed_info['hasEgg'] == '1':
                 post_dict = OrderedDict()
                 post_dict['userId'] = self.user.data['userId']
                 post_dict['fieldId'] = filed_info['id']
@@ -85,15 +91,16 @@ class Director:
         for filed_info in fields_list:
             if filed_info['active'] and egg_count > 0:
                 # 可以孵化位置数量
-                blank_space = max_num - filed_info['chickens']
+                blank_space = max_num - int(filed_info['chickens'])
                 if blank_space > 0:
                     post_dict = OrderedDict()
                     add_count = egg_count if egg_count < blank_space else blank_space
                     egg_count -= add_count
-                    post_dict['userId'] = self.user.data['token']
+                    post_dict['userId'] = self.user.data['userId']
                     post_dict['fieldId'] = filed_info['id']
                     post_dict['addCount'] = str(add_count)
                     post_dict['token'] = self.user.data['token']
+                    print(post_dict)
                     # 没有数据需要更新到user.data
                     post_obj = Post('hatchField', post_dict)
                     if not post_obj.success:
@@ -107,8 +114,7 @@ class Director:
         # 暂时不处理好友
         post_dict['friendId'] = ''
         post_dict['token'] = self.user.data['token']
-        post_obj = Post('getFieldInfo', post_dict,
-                        'chickenCount', 'eggCount', 'fields')
+        post_obj = Post('getFieldInfo', post_dict, 'chickenCount', 'eggCount', 'fields')
         if post_obj.success:
             response_dic = post_obj.get_response_dic()
             self.user.update(response_dic)
