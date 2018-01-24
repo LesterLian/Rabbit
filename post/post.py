@@ -17,6 +17,7 @@ class Post:
         self.tmp_dic = {}
         self.success = False
         self.run()
+
     def run(self):
         # self.set_post_url()
         self.post()

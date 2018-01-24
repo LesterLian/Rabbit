@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Time    : 22/01/2018 2:39 PM
 # @Author  : Akio
+import time
+
 from post.post import *
 
 
@@ -13,10 +15,13 @@ class Director:
         self.wrong_info = []
 
     def run(self):
-        while not (self.tag and self.wrong_num < 3):
+        while (not self.tag) and self.wrong_num < 3:
             self.do_post()
-        # l debug
-        print('run() ends')
+        self.get_field_info()
+
+    @staticmethod
+    def sleep():
+        time.sleep(0.8)
 
     def do_post(self):
         # l debug
@@ -33,6 +38,7 @@ class Director:
             self.clean_friend()
         elif self.next_step == 'end':
             self.tag = True
+            self.sleep()
         # l debug
         # print(self.user.data)
 
@@ -95,9 +101,10 @@ class Director:
                     post_dict['friendId'] = friend['userId']
                     post_dict['token'] = self.user.data['token']
                     post_obj = Post('cleanFriend', post_dict)
+                    self.sleep()
                     if not post_obj.success:
                         # todo 重写错误信息格式
-                        self.wrong_info.append('clean_friend')
+                        # self.wrong_info.append('clean_friend')
                         print('--------------error--------------')
                         print(post_obj.response_json)
                         print('--------------/error--------------')
@@ -130,7 +137,7 @@ class Director:
         egg_count = int(float(self.user.data['eggCount']))
         fields_list = self.user.data['fields']
         for filed_info in fields_list:
-            if filed_info['active'] and egg_count > 0:
+            if egg_count > 0 and filed_info['active']:
                 # 可以孵化位置数量
                 blank_space = max_num - int(filed_info['chickens'])
                 if blank_space > 0:
@@ -143,6 +150,7 @@ class Director:
                     post_dict['token'] = self.user.data['token']
                     # 没有数据需要更新到user.data
                     post_obj = Post('hatchField', post_dict)
+                    self.sleep()
                     if post_obj.success:
                         egg_count = int(float(self.user.data['eggCount']) - add_count)
                     else:
