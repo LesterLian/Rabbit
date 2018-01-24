@@ -12,9 +12,6 @@ def test():
     user.update(gv.passport_dic)
     director = Director(user)
     director.run()
-    print(director.user.data.__class__)
-    for key, val in director.user.data.items():
-        print(key, val)
     print(director.wrong_info)
     print('over')
 
@@ -48,11 +45,11 @@ def test_fiend():
     director.login()
     test_dict = OrderedDict()
     test_dict['userId'] = director.user.data['userId']
-    test_dict['friendId'] = '9127a00c-a5a9-444b-8592-284608839a13'
+    test_dict['friendId'] = '2b822135-a1b7-429c-be41-4ca6a30a3916'
     test_dict['token'] = director.user.data['token']
-    post_obj = Post('getFieldInfo',
+    post_obj = Post('cleanFriend',
                     test_dict,
-                    'chickenCount', 'eggCount', 'fields')
+                    )
     print(post_obj.response_json)
     post_obj = Post('cleanFriend',test_dict)
     print(post_obj.response_json)

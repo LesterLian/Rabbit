@@ -34,7 +34,7 @@ class Director:
         elif self.next_step == 'end':
             self.tag = True
         # l debug
-        print(self.user.data)
+        # print(self.user.data)
 
     # 登陆
     def login(self):
@@ -92,12 +92,20 @@ class Director:
                 if friend['hasClean'] == '0':
                     post_dict = OrderedDict()
                     post_dict['userId'] = self.user.data['userId']
-                    post_dict['fieldId'] = friend['userId']
+                    post_dict['friendId'] = friend['userId']
                     post_dict['token'] = self.user.data['token']
-                post_obj = Post('getFieldEggs', post_dict)
-                if not post_obj.success:
-                    # todo 重写错误信息格式
-                    self.wrong_info.append('clean_friend: ' + post_dict['fieldId'] + post_obj.response_json)
+                    post_obj = Post('cleanFriend', post_dict)
+                    if not post_obj.success:
+                        # todo 重写错误信息格式
+                        self.wrong_info.append('clean_friend')
+                        print('--------------error--------------')
+                        print(post_obj.response_json)
+                        print('--------------/error--------------')
+                    else:
+                        print('------------success:------------')
+                        for key, val in post_obj.response_json.items():
+                            print(key, val)
+                        print('------------/success:------------')
         self.next_step = 'hatchField'
 
     # 获取好友列表
