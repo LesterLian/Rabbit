@@ -10,7 +10,7 @@ from tomorrow3 import threads
 
 
 # 感觉没效果
-@threads(10)
+@threads(100)
 def press(btn_name):
     if btn_name == '添加':
         app.showSubWindow('password_box')
@@ -22,12 +22,15 @@ def press(btn_name):
         passport['pwd'] = pwd
         passport_list.append(passport)
         app.addListItem('账户信息', phone)
+        app.clearEntry("帐号")
+        app.clearEntry("密码")
     if btn_name == '删除':
         position = app.getListBoxPos('账户信息')[0]
         app.removeListItemAtPos('账户信息', position)
         passport_list.pop(position)
     if btn_name == '开始':
-        print('kaishi')
+        app.disableButton('开始')
+        app.clearListBox("处理结果")
         for passport in passport_list:
             user = User()
             user.update(passport)
@@ -43,10 +46,11 @@ def press(btn_name):
             # time.sleep(1)
 
         print('-------结束----------')
+        app.enableButton('开始')
 
 
 # create the GUI & set a title
-app = gui("AutoRabbit", "800x600")
+app = gui("AutoRabbit", "600x300")
 passport_list = gv.passport_list
 
 show_info = []
@@ -60,11 +64,14 @@ app.addButtons(['添加',
                 '开始'],
                press, 3, 0, 2, 1
                )
+app.setStretch("none")
 # pop-up
 app.startSubWindow('password_box', "添加账户", modal=True)
 app.addLabelNumericEntry('帐号', 0, 0)
-app.addLabelSecretEntry('密码', 1, 0)
+app.addLabelEntry('密码', 1, 0)
 app.addButtons(["ok"], press, 2, 0)
 app.stopSubWindow()
 
 app.go()
+
+# todo 修改帐号功能

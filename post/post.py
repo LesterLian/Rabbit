@@ -2,6 +2,8 @@
 # @Time    : 23/01/2018 3:20 PM
 # @Author  : Akio
 from collections import OrderedDict
+from json import JSONDecodeError
+
 import requests
 from json.decoder import JSONDecodeError
 import global_var as gv
@@ -20,7 +22,6 @@ class Post:
         self.run()
 
     def run(self):
-        # self.set_post_url()
         self.post()
         self.make_response_dic()
 
@@ -28,6 +29,10 @@ class Post:
         url = gv.url + self.command
         data = self.make_data(self.warp_dic(self.post_dict))
         response_temp = requests.post(url, data=data, headers=gv.headers)
+        # try:
+        #     response_temp.json()
+        # except JSONDecodeError:
+        #     self.response_json['message'] = 'JSON Error'
         if len(response_temp.content) > 0:
             self.response_json = response_temp.json()
         else:
@@ -67,7 +72,3 @@ class Post:
                 self.json2dic(val)
             else:
                 self.tmp_dic[key] = val
-
-    # @abstractmethod
-    # def set_post_url(self):
-    #     pass
