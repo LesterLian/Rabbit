@@ -5,6 +5,7 @@ from collections import OrderedDict
 from json import JSONDecodeError
 
 import requests
+from json.decoder import JSONDecodeError
 import global_var as gv
 
 
