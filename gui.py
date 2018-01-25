@@ -38,7 +38,7 @@ def press(btn_name):
             director.run()
             print(director.user.data)
             if director.wrong_info == []:
-                info = director.user.data['phone'] + ": " + "成功" + \
+                info = director.user.data['phone'] + ": " + "成功 " + \
                        "兔子数： " + director.user.data['chickenCount']
             else:
                 info = director.user.data['phone'] + ": " + "失败" + str(director.wrong_info)
