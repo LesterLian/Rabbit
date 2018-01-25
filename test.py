@@ -52,15 +52,10 @@ def test_fiend():
                     test_dict,
                     )
     print(post_obj.response_json)
-    post_obj = Post('cleanFriend',test_dict)
+    post_obj = Post('cleanFriend', test_dict)
     print(post_obj.response_json)
+
 
 if __name__ == '__main__':
     test()
     # test_fiend()
-    # passport_list = gv.passport_list
-    # for passport in passport_list:
-    #     user = User()
-    #     user.update(passport)
-    #     director = Director(user)
-    #     director.run()
