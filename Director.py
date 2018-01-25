@@ -4,6 +4,7 @@
 import time
 
 from post.post import *
+from post.post_subclasses import *
 
 
 class Director:
@@ -19,13 +20,25 @@ class Director:
             self.do_post()
         self.get_field_info()
 
-    @staticmethod
-    def sleep():
-        time.sleep(0.2)
+    # @staticmethod
+    # def sleep():
+    #     time.sleep(0.2)
 
     def do_post(self):
         # l debug
-        print(self.next_step)
+        print('Posting', self.next_step)
+
+        # post_obj = None
+        # if self.next_step == 'login':
+        #     post_obj = Login(self.user)
+        # elif self.next_step == 'end':
+        #     self.tag = True
+        #     return
+        # self.next_step = post_obj.next_step
+        # if not post_obj.wrong_info == '':
+        #     self.wrong_num += 1
+        #     self.wrong_info.append(post_obj.wrong_info)
+
         if self.next_step == 'login':
             self.login()
         elif self.next_step == 'getRatio':
@@ -39,6 +52,7 @@ class Director:
         elif self.next_step == 'end':
             self.tag = True
             # self.sleep()
+
         # l debug
         # print(self.user.data)
 
@@ -54,7 +68,7 @@ class Director:
             self.next_step = 'getRatio'
         else:
             self.wrong_num += 1
-            self.wrong_info.append('login')
+            self.wrong_info.append('登录')
             self.next_step = 'login'
 
     # 获得利率
@@ -69,7 +83,7 @@ class Director:
             self.next_step = 'getFieldEggs'
         else:
             self.wrong_num += 1
-            self.wrong_info.append('getRatio')
+            self.wrong_info.append('首页')
             self.next_step = 'login'
 
     # 收小兔
@@ -95,7 +109,7 @@ class Director:
         if self.user.data['friends']:
             for friend in self.user.data['friends']:
                 # 还没被清扫
-                if friend['hasClean'] == '0':
+                if friend['hasClean'] == '0' or friend['hasClean'] == '1':
                     post_dict = OrderedDict()
                     post_dict['userId'] = self.user.data.get('userId')
                     post_dict['friendId'] = friend.get('userId')

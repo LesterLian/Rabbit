@@ -3,6 +3,7 @@
 # @Author  : Akio
 from collections import OrderedDict
 import requests
+from json.decoder import JSONDecodeError
 import global_var as gv
 
 
@@ -29,10 +30,6 @@ class Post:
         response_temp = requests.post(url, data=data, headers=gv.headers)
         if len(response_temp.content) > 0:
             self.response_json = response_temp.json()
-            # if len(self.response_json) > 0 and 'success' in self.response_json.keys():
-            #     self.response_json['success'] == '1'
-            # else:
-            #     self.response_json['success'] = '0'
         else:
             self.response_json['success'] = '0'
         if self.response_json['success'] == '1':
