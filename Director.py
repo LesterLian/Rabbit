@@ -21,7 +21,7 @@ class Director:
 
     @staticmethod
     def sleep():
-        time.sleep(0.6)
+        time.sleep(0.2)
 
     def do_post(self):
         # l debug
@@ -101,7 +101,7 @@ class Director:
                     post_dict['friendId'] = friend.get('userId')
                     post_dict['token'] = self.user.data.get('token')
                     post_obj = Post('cleanFriend', post_dict)
-                    self.sleep()
+                    # self.sleep()
                     if not post_obj.success:
                         # todo 重写错误信息格式
                         # self.wrong_info.append('clean_friend')
@@ -150,7 +150,7 @@ class Director:
                     post_dict['token'] = self.user.data.get('token')
                     # 没有数据需要更新到user.data
                     post_obj = Post('hatchField', post_dict)
-                    self.sleep()
+                    # self.sleep()
                     if post_obj.success:
                         egg_count = int(float(self.user.data['eggCount']) - add_count)
                     else:
@@ -170,6 +170,8 @@ class Director:
             # 作为终端没有下一步指令，只update数据
             self.user.update(response_dic)
         else:
+            print('error')
+            print(post_obj.response_json)
             self.wrong_num += 1
             self.wrong_info.append('getFieldInfo')
 

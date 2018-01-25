@@ -12,7 +12,7 @@ class Post:
         self.command = command
         self.post_dict = post_dict
         self.return_keys = return_keys
-        self.response_json = None
+        self.response_json = {}
         self.response_dic = {}
         self.tmp_dic = {}
         self.success = False
@@ -26,11 +26,17 @@ class Post:
     def post(self):
         url = gv.url + self.command
         data = self.make_data(self.warp_dic(self.post_dict))
-        self.response_json = requests.post(url, data=data, headers=gv.headers).json()
-        # ximi
-        # print(self.response_json['success'], self.response_json['message'])
-        self.success = self.response_json['success'] == '1'
-        return self.response_json['success'] == '0'
+        response_temp = requests.post(url, data=data, headers=gv.headers)
+        if len(response_temp.content) > 0:
+            self.response_json = response_temp.json()
+            # if len(self.response_json) > 0 and 'success' in self.response_json.keys():
+            #     self.response_json['success'] == '1'
+            # else:
+            #     self.response_json['success'] = '0'
+        else:
+            self.response_json['success'] = '0'
+        if self.response_json['success'] == '1':
+            self.success = True
 
     @staticmethod
     def warp_dic(dic_t):
