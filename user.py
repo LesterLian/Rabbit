@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Time    : 1/21/18 11:04 AM
 # @Author  : Lester
+import threading
+
+L = threading.Lock()  # 引入锁
 
 
 class User:

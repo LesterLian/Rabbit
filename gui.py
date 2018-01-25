@@ -27,18 +27,21 @@ def press(btn_name):
         app.removeListItemAtPos('账户信息', position)
         passport_list.pop(position)
     if btn_name == '开始':
+        print('kaishi')
         for passport in passport_list:
             user = User()
             user.update(passport)
             director = Director(user)
             director.run()
+            print(director.user.data)
             if director.wrong_info == []:
-                info = director.user.data['phone'] + ": " + "成功" + \
+                info = director.user.data['phone'] + ": " + "成功 " + \
                        "兔子数： " + director.user.data['chickenCount']
             else:
                 info = director.user.data['phone'] + ": " + "失败" + str(director.wrong_info)
             app.addListItem('处理结果', info)
-            time.sleep(5)
+            # time.sleep(1)
+
         print('-------结束----------')
 
 
