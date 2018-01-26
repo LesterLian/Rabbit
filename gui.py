@@ -36,15 +36,19 @@ def press(btn_name):
             user.update(passport)
             director = Director(user)
             director.run()
+            # TODO delete
             print(director.user.data)
             if director.wrong_info == []:
-                info = director.user.data['phone'] + ": " + "成功 " + \
-                       "兔子数： " + director.user.data['chickenCount']
+                info = director.user.data['phone'] + ": " + "成功" + \
+                    " 兔子数：" + director.user.data['chickenCount'] + \
+                    " 兔仔数: " + director.user.data['eggCount']
             else:
-                info = director.user.data['phone'] + ": " + "失败" + str(director.wrong_info)
+                info = director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) + \
+                       " 兔子数：" + director.user.data['chickenCount'] + \
+                       " 兔仔数: " + director.user.data['eggCount']
             app.addListItem('处理结果', info)
             # time.sleep(1)
-
+        # TODO delete
         print('-------结束----------')
         app.enableButton('开始')
 
@@ -56,6 +60,7 @@ passport_list = gv.passport_list
 show_info = []
 for item in passport_list:
     show_info.append(item['phone'])
+# TODO delete
 print(show_info)
 app.addListBox('账户信息', show_info, 0, 0, 1, 3)
 app.addListBox('处理结果', [], 0, 1, 3, 3)

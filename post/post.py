@@ -28,7 +28,14 @@ class Post:
     def post(self):
         url = gv.url + self.command
         data = self.make_data(self.warp_dic(self.post_dict))
-        response_temp = requests.post(url, data=data, headers=gv.headers)
+        try:
+            response_temp = requests.post(url, data=data, headers=gv.headers)
+        except requests.ConnectionError:
+            self.response_json['success'] = '0'
+            self.response_json['message'] = 'POST TimeOut'
+        except Exception as err:
+            self.response_json['success'] = '0'
+            self.response_json['message'] = str(err.with_traceback())
         # try:
         #     response_temp.json()
         # except JSONDecodeError:
