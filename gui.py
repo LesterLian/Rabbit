@@ -29,6 +29,13 @@ def press(btn_name):
         app.removeListItemAtPos('账户信息', position)
         passport_list.pop(position)
     if btn_name == '开始':
+        try:
+            user_file = open('user', 'w')
+            for passport in passport_list:
+                user_file.write(passport['phone'] + ' ' + passport['pwd'] + '\n')
+            user_file.close()
+        except:
+            print('Write File Error')
         app.disableButton('开始')
         app.clearListBox("处理结果")
         for passport in passport_list:
@@ -39,14 +46,14 @@ def press(btn_name):
             # TODO delete
             print(director.user.data)
             if director.wrong_info == []:
-                info = director.user.data['phone'] + ": " + "成功" + \
+                passport = director.user.data['phone'] + ": " + "成功" + \
                     " 兔子数：" + director.user.data['chickenCount'] + \
                     " 兔仔数: " + director.user.data['eggCount']
             else:
-                info = director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) + \
+                passport = director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) + \
                        " 兔子数：" + director.user.data['chickenCount'] + \
                        " 兔仔数: " + director.user.data['eggCount']
-            app.addListItem('处理结果', info)
+            app.addListItem('处理结果', passport)
             # time.sleep(1)
         # TODO delete
         print('-------结束----------')
@@ -55,7 +62,17 @@ def press(btn_name):
 
 # create the GUI & set a title
 app = gui("AutoRabbit", "600x300")
-passport_list = gv.passport_list
+
+passport_list = []
+# passport_list = gv.passport_list
+try:
+    user_file = open('user', 'r')
+    for line in user_file.readlines():
+        temp = line.split()
+        passport_list.append({'phone': temp[0], 'pwd': temp[1]})
+        user_file.close()
+except FileNotFoundError:
+    print('File Not Found')
 
 show_info = []
 for item in passport_list:

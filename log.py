@@ -20,7 +20,5 @@ class Log:
 
     def clear(self):
         self.file.close()
-        self.file = open(self.path_to_log, 'w')
-        self.file.write('')
-        self.close()
+        open(self.path_to_log, 'w').close()
         self.file = open(self.path_to_log, 'a')
