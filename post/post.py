@@ -30,22 +30,25 @@ class Post:
         data = self.make_data(self.warp_dic(self.post_dict))
         try:
             response_temp = requests.post(url, data=data, headers=gv.headers)
+            try:
+                response_temp.json()
+            except JSONDecodeError:
+                print(response_temp.status_code, response_temp.reason, len(response_temp.content),
+                      len(response_temp.text))
+                self.response_json['message'] = 'JSON Error'
+            if len(response_temp.content) > 0:
+                self.response_json = response_temp.json()
+            else:
+                self.response_json['success'] = '0'
+            if self.response_json['success'] == '1':
+                self.success = True
         except requests.ConnectionError:
             self.response_json['success'] = '0'
             self.response_json['message'] = 'POST TimeOut'
         except Exception as err:
             self.response_json['success'] = '0'
             self.response_json['message'] = str(err.with_traceback())
-        # try:
-        #     response_temp.json()
-        # except JSONDecodeError:
-        #     self.response_json['message'] = 'JSON Error'
-        if len(response_temp.content) > 0:
-            self.response_json = response_temp.json()
-        else:
-            self.response_json['success'] = '0'
-        if self.response_json['success'] == '1':
-            self.success = True
+
 
     @staticmethod
     def warp_dic(dic_t):

@@ -5,6 +5,7 @@ from Director import Director
 from user import User
 import global_var as gv
 from post.post import *
+import json
 
 
 def test():
@@ -57,5 +58,23 @@ def test_fiend():
 
 
 if __name__ == '__main__':
-    test()
+    # test()
     # test_fiend()
+    file = open('user', 'w')
+    user_list = [
+        {'phone': '17702209668', 'pwd': '111111'},
+        {'phone': '17702209690', 'pwd': '111111'},
+        {'phone': '17702209693', 'pwd': '111111'},
+        {'phone': '17702206367', 'pwd': '111111'},
+        {'phone': '13752155678', 'pwd': '111111'},
+        {'phone': '18902144454', 'pwd': '111111'},
+        {'phone': '18902145524', 'pwd': '111111'},
+        {'phone': '17702201060', 'pwd': '111111'}
+    ]
+    for info in user_list:
+        file.write(info['phone']+' '+info['pwd']+'\n')
+    new_list = []
+    # for line in file.readlines():
+    #     temp = line.split()
+    #     new_list.append({'phone': temp[0], 'pwd': temp[1]})
+    # print(new_list)

@@ -6,6 +6,8 @@
 # from post.post import *
 from post.post_subclasses import *
 from log import Log
+import traceback
+import sys
 
 
 class Director:
@@ -16,14 +18,23 @@ class Director:
         self.wrong_num = 0
         self.tag = False
         self.wrong_info = []
+        # TODO decide where to create and close log
+        self.log = Log('log')
+        self.log.log('Running ' + self.user.data['phone'])
 
     def run(self):
-        # TODO decide where to create and close log
-        log = Log('log')
-        while (not self.tag) and self.wrong_num < 3:
-            self.do_post()
-        # self.get_field_info()
-        log.close()
+        try:
+            while (not self.tag) and self.wrong_num < 3:
+                self.do_post()
+            # self.get_field_info()
+        except Exception as err:
+            traceback.print_exception(*sys.exc_info())
+            self.log.log('\n----- Unexpected Error-----\n' +
+                         err.__str__() +
+                         '\n----- End -----'
+                         )
+            exit(1)
+        self.log.close()
 
     # @staticmethod
     # def sleep():
@@ -32,19 +43,19 @@ class Director:
     def do_post(self):
         # TODO delete
         # l debug
-        print('Posting', self.next_step)
+        self.log.log('Posting' + ' ' + self.next_step)
 
         post_obj = None
         if self.next_step == 'login':
-            post_obj = Login(self.user, Director.log)
+            post_obj = Login(self.user, self.log)
         elif self.next_step == 'getRatio':
-            post_obj = GetRatio(self.user, Director.log)
+            post_obj = GetRatio(self.user, self.log)
         elif self.next_step == 'getFieldEggs':
-            post_obj = GetFieldEggs(self.user, Director.log)
+            post_obj = GetFieldEggs(self.user, self.log)
         elif self.next_step == 'hatchField':
-            post_obj = HatchField(self.user, Director.log)
+            post_obj = HatchField(self.user, self.log)
         elif self.next_step == 'cleanFriend':
-            post_obj = CleanFriend(self.user, Director.log)
+            post_obj = CleanFriend(self.user, self.log)
         elif self.next_step == 'end':
             self.tag = True
             return

@@ -21,12 +21,11 @@ class Login(PostInterface):
         response_dic = self.post_obj.get_response_dic()
         self.user.update(response_dic)
         self.next_step = 'getRatio'
-        self.log.log('login')
 
     def fail(self):
         self.wrong_info = '登录'
         self.next_step = 'login'
-        self.log.log(self.post_obj['message'])
+        self.log.log(self.post_obj.response_json['message'])
         
 
 class GetRatio(PostInterface):
@@ -82,6 +81,7 @@ class GetFieldEggs(PostInterface):
     def fail(self):
         self.wrong_info = '收兔'
         self.next_step = 'cleanFriend'  # TODO check logic
+        self.log.log(self.post_obj.response_json['message'])
 
 
 class HatchField(PostInterface):
@@ -115,6 +115,8 @@ class HatchField(PostInterface):
                     self.post_obj = Post('hatchField', self.post_dict)
                     # TODO logic
                     self.check()
+                    if not self.successful:
+                        self.log.log(self.post_obj.response_json['message'])
         self.check()
         # TODO check logic
         if active_count == 0:
@@ -129,6 +131,7 @@ class HatchField(PostInterface):
         self.next_step = 'end'  # todo 下一步是啥
 
 
+
 class CleanFriend(PostInterface):
     def __init__(self, user, log):
         GetFriendList(user, log)
@@ -140,6 +143,8 @@ class CleanFriend(PostInterface):
         self.post_dict['token'] = self.user.data.get('token')
 
     def post(self):
+        self.check()
+        print('clean', self.successful)
         if self.user.data['friends']:
             for friend in self.user.data['friends']:
                 # 还没被清扫
@@ -147,6 +152,8 @@ class CleanFriend(PostInterface):
                     self.post_dict['friendId'] = friend.get('userId')
                     self.post_obj = Post('cleanFriend', self.post_dict)
                     self.check()
+                    if not self.successful:
+                        self.log.log(self.post_obj.response_json['message'])
         self.check()
 
     def success(self):

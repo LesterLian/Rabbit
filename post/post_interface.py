@@ -32,7 +32,6 @@ class PostInterface:
             self.fail()
             if self.next_step == '' or self.wrong_info == '':
                 raise ValueError('next_step and wrong_info needs to be set after fail')
-        print(self.next_step)
 
     @abstractmethod
     def init_post_dict(self):
@@ -51,5 +50,5 @@ class PostInterface:
         pass
 
     def check(self):
-        self.successful = self.successful and (self.post_obj and self.post_obj.success)
+        self.successful = self.successful and (self.post_obj is not None and self.post_obj.success)
         self.checked += 1
