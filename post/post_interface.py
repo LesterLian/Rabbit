@@ -10,7 +10,8 @@ class PostInterface:
     next_step must be set
     check() must be called at least once and when every post occurs
     """
-    def __init__(self, user):
+    def __init__(self, user, log):
+        self.log = log
         self.user = user
         self.post_dict = OrderedDict()
         self.post_obj = None

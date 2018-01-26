@@ -3,11 +3,13 @@
 # @Author  : Akio
 # import time
 
-from post.post import *
+# from post.post import *
 from post.post_subclasses import *
+from log import Log
 
 
 class Director:
+
     def __init__(self, user):
         self.user = user
         self.next_step = 'login'
@@ -16,29 +18,33 @@ class Director:
         self.wrong_info = []
 
     def run(self):
+        # TODO decide where to create and close log
+        log = Log('log')
         while (not self.tag) and self.wrong_num < 3:
             self.do_post()
-        self.get_field_info()
+        # self.get_field_info()
+        log.close()
 
     # @staticmethod
     # def sleep():
     #     time.sleep(0.2)
 
     def do_post(self):
+        # TODO delete
         # l debug
         print('Posting', self.next_step)
 
         post_obj = None
         if self.next_step == 'login':
-            post_obj = Login(self.user)
+            post_obj = Login(self.user, Director.log)
         elif self.next_step == 'getRatio':
-            post_obj = GetRatio(self.user)
+            post_obj = GetRatio(self.user, Director.log)
         elif self.next_step == 'getFieldEggs':
-            post_obj = GetFieldEggs(self.user)
+            post_obj = GetFieldEggs(self.user, Director.log)
         elif self.next_step == 'hatchField':
-            post_obj = HatchField(self.user)
+            post_obj = HatchField(self.user, Director.log)
         elif self.next_step == 'cleanFriend':
-            post_obj = CleanFriend(self.user)
+            post_obj = CleanFriend(self.user, Director.log)
         elif self.next_step == 'end':
             self.tag = True
             return
@@ -47,6 +53,7 @@ class Director:
         if not post_obj.wrong_info == '':
             self.wrong_num += 1
             self.wrong_info.append(post_obj.wrong_info)
+        # sleep
 
         # if self.next_step == 'login':
         #     self.login()
@@ -61,9 +68,6 @@ class Director:
         # elif self.next_step == 'end':
         #     self.tag = True
             # self.sleep()
-
-        # l debug
-        # print(self.user.data)
 
     # # 登陆
     # def login(self):
@@ -199,6 +203,7 @@ class Director:
     #         self.wrong_info.append('getFieldInfo')
 
     # 判断success=='0'时候的处理方法可以根据response_json['message']来判断
+
     def post_fail(self, post_obj):
         message = post_obj.response_json['message']
         if message == '已超时，请重新登录':

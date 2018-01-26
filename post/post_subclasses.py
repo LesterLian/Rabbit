@@ -6,8 +6,8 @@ from post.post import Post
 
 
 class Login(PostInterface):
-    def __init__(self, user):
-        super(Login, self).__init__(user)
+    def __init__(self, user, log):
+        super(Login, self).__init__(user, log)
 
     def post(self):
         self.post_obj = Post('login', self.post_dict, 'userId', 'token')
@@ -21,15 +21,17 @@ class Login(PostInterface):
         response_dic = self.post_obj.get_response_dic()
         self.user.update(response_dic)
         self.next_step = 'getRatio'
+        self.log.log('login')
 
     def fail(self):
         self.wrong_info = '登录'
         self.next_step = 'login'
-
+        self.log.log(self.post_obj['message'])
+        
 
 class GetRatio(PostInterface):
-    def __init__(self, user):
-        super(GetRatio, self).__init__(user)
+    def __init__(self, user, log):
+        super(GetRatio, self).__init__(user, log)
 
     def init_post_dict(self):
         self.post_dict['userId'] = self.user.data.get('userId')
@@ -50,9 +52,9 @@ class GetRatio(PostInterface):
 
 
 class GetFieldEggs(PostInterface):
-    def __init__(self, user):
-        GetFieldInfo(user)
-        super(GetFieldEggs, self).__init__(user)
+    def __init__(self, user, log):
+        GetFieldInfo(user, log)
+        super(GetFieldEggs, self).__init__(user, log)
 
     def init_post_dict(self):
         self.post_dict['userId'] = self.user.data.get('userId')
@@ -72,6 +74,7 @@ class GetFieldEggs(PostInterface):
         # TODO check logic
         if count == 0:
             self.successful = True
+        # sleep
 
     def success(self):
         self.next_step = 'cleanFriend'
@@ -82,9 +85,9 @@ class GetFieldEggs(PostInterface):
 
 
 class HatchField(PostInterface):
-    def __init__(self, user):
-        GetFieldInfo(user)
-        super(HatchField, self).__init__(user)
+    def __init__(self, user, log):
+        GetFieldInfo(user, log)
+        super(HatchField, self).__init__(user, log)
         self.max_num = 3000  # 黄地上限更高
 
     def init_post_dict(self):
@@ -116,6 +119,7 @@ class HatchField(PostInterface):
         # TODO check logic
         if active_count == 0:
             self.successful = True
+        # sleep
 
     def success(self):
         self.next_step = 'end'  # todo 下一步是啥
@@ -126,9 +130,9 @@ class HatchField(PostInterface):
 
 
 class CleanFriend(PostInterface):
-    def __init__(self, user):
-        GetFriendList(user)
-        super(CleanFriend, self).__init__(user)
+    def __init__(self, user, log):
+        GetFriendList(user, log)
+        super(CleanFriend, self).__init__(user, log)
 
     def init_post_dict(self):
         self.post_dict['userId'] = self.user.data.get('userId')
@@ -154,8 +158,8 @@ class CleanFriend(PostInterface):
 
 
 class GetFriendList(PostInterface):
-    def __init__(self, user):
-        super(GetFriendList, self).__init__(user)
+    def __init__(self, user, log):
+        super(GetFriendList, self).__init__(user, log)
 
     def init_post_dict(self):
         self.post_dict['userId'] = self.user.data.get('userId')
@@ -177,8 +181,8 @@ class GetFriendList(PostInterface):
 
 
 class GetFieldInfo(PostInterface):
-    def __init__(self, user):
-        super(GetFieldInfo, self).__init__(user)
+    def __init__(self, user, log):
+        super(GetFieldInfo, self).__init__(user, log)
 
     def init_post_dict(self):
         self.post_dict['userId'] = self.user.data.get('userId')
@@ -199,4 +203,3 @@ class GetFieldInfo(PostInterface):
     def fail(self):
         self.wrong_info = '兔场'
         self.next_step = 'None'
-
