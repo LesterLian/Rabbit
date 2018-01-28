@@ -11,9 +11,9 @@ class Log:
 
     def log(self, message):
         timestamp = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.now())
-        text = timestamp + '    ' + message + '\n'
+        text = timestamp + '    ' + message
         print(text)
-        self.file.write(text)
+        self.file.write(text + '\n')
 
     def close(self):
         self.file.close()

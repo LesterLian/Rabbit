@@ -61,18 +61,18 @@ class GetFieldEggs(PostInterface):
         self.post_dict['token'] = self.user.data.get('token')
 
     def post(self):
-        count = 0
+        self.check()  # Must be called.
+        self.successful
         fields_list = self.user.data['fields']
+
         for filed_info in fields_list:
             if filed_info['hasEgg'] == '1':
                 count += 1
                 self.post_dict['fieldId'] = filed_info.get('id')
                 self.post_obj = Post('getFieldEggs', self.post_dict)
                 self.check()
-        self.check()
+
         # TODO check logic
-        if count == 0:
-            self.successful = True
         # sleep
 
     def success(self):
@@ -117,7 +117,7 @@ class HatchField(PostInterface):
                     self.check()
                     if not self.successful:
                         self.log.log(self.post_obj.response_json['message'])
-        self.check()
+        self.check()  # Should have called check()
         # TODO check logic
         if active_count == 0:
             self.successful = True
@@ -131,7 +131,6 @@ class HatchField(PostInterface):
         self.next_step = 'end'  # todo 下一步是啥
 
 
-
 class CleanFriend(PostInterface):
     def __init__(self, user, log):
         GetFriendList(user, log)
@@ -143,18 +142,19 @@ class CleanFriend(PostInterface):
         self.post_dict['token'] = self.user.data.get('token')
 
     def post(self):
-        self.check()
-        print('clean', self.successful)
+        self.check()  # Must be called.
+        self.successful = True
+
         if self.user.data['friends']:
             for friend in self.user.data['friends']:
                 # 还没被清扫
                 if friend['hasClean'] == '0':
                     self.post_dict['friendId'] = friend.get('userId')
                     self.post_obj = Post('cleanFriend', self.post_dict)
-                    self.check()
-                    if not self.successful:
+                    if self.post_obj and not self.check():
                         self.log.log(self.post_obj.response_json['message'])
-        self.check()
+        # l debug
+        # print('clean', self.successful)
 
     def success(self):
         self.next_step = 'hatchField'
