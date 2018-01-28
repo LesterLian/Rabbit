@@ -2,6 +2,7 @@
 # @Time    : 1/25/18 6:26 PM
 # @Author  : Lester
 from datetime import datetime
+from post.post import Post
 
 
 class Log:
@@ -11,9 +12,16 @@ class Log:
 
     def log(self, message):
         timestamp = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.now())
-        text = timestamp + '    ' + message + '\n'
+        text = timestamp + '    '
+
+        if message is None:
+            text += 'POST has no response.'
+        elif message.__class__ is Post:
+            text += message.response_json['message']
+        elif message.__class__ is str:
+            text += message
         print(text)
-        self.file.write(text)
+        self.file.write(text + '\n')
 
     def close(self):
         self.file.close()

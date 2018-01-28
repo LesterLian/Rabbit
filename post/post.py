@@ -28,6 +28,7 @@ class Post:
     def post(self):
         url = gv.url + self.command
         data = self.make_data(self.warp_dic(self.post_dict))
+        # TODO maybe move.
         try:
             response_temp = requests.post(url, data=data, headers=gv.headers)
             try:

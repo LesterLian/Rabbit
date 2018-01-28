@@ -10,7 +10,7 @@ from tomorrow3 import threads
 
 
 # 感觉没效果
-@threads(100)
+# @threads(100)
 def press(btn_name):
     if btn_name == '添加':
         app.showSubWindow('password_box')
@@ -39,25 +39,30 @@ def press(btn_name):
         app.disableButton('开始')
         app.clearListBox("处理结果")
         for passport in passport_list:
-            user = User()
-            user.update(passport)
-            director = Director(user)
-            director.run()
-            # TODO delete
-            print(director.user.data)
-            if director.wrong_info == []:
-                passport = director.user.data['phone'] + ": " + "成功" + \
-                    " 兔子数：" + director.user.data['chickenCount'] + \
-                    " 兔仔数: " + director.user.data['eggCount']
-            else:
-                passport = director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) + \
-                       " 兔子数：" + director.user.data['chickenCount'] + \
-                       " 兔仔数: " + director.user.data['eggCount']
-            app.addListItem('处理结果', passport)
-            # time.sleep(1)
+            run(passport)
         # TODO delete
         print('-------结束----------')
         app.enableButton('开始')
+
+
+# @threads(2)  # app.addListItem may need block
+def run(passport):
+    user = User()
+    user.update(passport)
+    director = Director(user)
+    director.run()
+    # TODO delete
+    print(director.user.data)
+    if director.wrong_info == []:
+        passport = director.user.data['phone'] + ": " + "成功" + \
+                   " 兔子数：" + director.user.data['chickenCount'] + \
+                   " 兔仔数: " + director.user.data['eggCount']
+    else:
+        passport = director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) + \
+                   " 兔子数：" + director.user.data['chickenCount'] + \
+                   " 兔仔数: " + director.user.data['eggCount']
+    app.addListItem('处理结果', passport)
+    # time.sleep(1)
 
 
 # create the GUI & set a title

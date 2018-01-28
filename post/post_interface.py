@@ -52,3 +52,4 @@ class PostInterface:
     def check(self):
         self.successful = self.successful and (self.post_obj is not None and self.post_obj.success)
         self.checked += 1
+        return self.successful
