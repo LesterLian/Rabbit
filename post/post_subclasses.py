@@ -25,7 +25,7 @@ class Login(PostInterface):
     def fail(self):
         self.wrong_info = '登录'
         self.next_step = 'login'
-        self.log.log(self.post_obj.response_json['message'])
+        self.log.log(self.post_obj)
         
 
 class GetRatio(PostInterface):
@@ -62,12 +62,12 @@ class GetFieldEggs(PostInterface):
 
     def post(self):
         self.check()  # Must be called.
-        self.successful
+        self.successful = True
         fields_list = self.user.data['fields']
 
         for filed_info in fields_list:
             if filed_info['hasEgg'] == '1':
-                count += 1
+                print('hasEgg')
                 self.post_dict['fieldId'] = filed_info.get('id')
                 self.post_obj = Post('getFieldEggs', self.post_dict)
                 self.check()
@@ -81,7 +81,7 @@ class GetFieldEggs(PostInterface):
     def fail(self):
         self.wrong_info = '收兔'
         self.next_step = 'cleanFriend'  # TODO check logic
-        self.log.log(self.post_obj.response_json['message'])
+        self.log.log(self.post_obj)
 
 
 class HatchField(PostInterface):
@@ -101,10 +101,10 @@ class HatchField(PostInterface):
         # 对小兔取整数
         egg_count = int(float(self.user.data['eggCount']))
         fields_list = self.user.data['fields']
-        active_count = 0
+        self.check()
+        self.successful = True
         for filed_info in fields_list:
             if egg_count > 0 and filed_info['active']:
-                active_count += 1
                 # 可以孵化位置数量
                 blank_space = max_num - int(filed_info['chickens'])
                 if blank_space > 0:
@@ -114,13 +114,10 @@ class HatchField(PostInterface):
                     self.post_dict['addCount'] = str(add_count)
                     self.post_obj = Post('hatchField', self.post_dict)
                     # TODO logic
-                    self.check()
-                    if not self.successful:
-                        self.log.log(self.post_obj.response_json['message'])
-        self.check()  # Should have called check()
+
+                    if not self.check():
+                        self.log.log(self.post_obj)
         # TODO check logic
-        if active_count == 0:
-            self.successful = True
         # sleep
 
     def success(self):
@@ -151,8 +148,8 @@ class CleanFriend(PostInterface):
                 if friend['hasClean'] == '0':
                     self.post_dict['friendId'] = friend.get('userId')
                     self.post_obj = Post('cleanFriend', self.post_dict)
-                    if self.post_obj and not self.check():
-                        self.log.log(self.post_obj.response_json['message'])
+                    if not self.check():
+                        self.log.log(self.post_obj)
         # l debug
         # print('clean', self.successful)
 
