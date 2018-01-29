@@ -30,7 +30,7 @@ class Post:
         data = self.make_data(self.warp_dic(self.post_dict))
         # TODO maybe move.
         try:
-            response_temp = requests.post(url, data=data, headers=gv.headers)
+            response_temp = requests.post(url, data=data, headers=gv.headers, timeout=5)
             try:
                 response_temp.json()
             except JSONDecodeError:
@@ -49,7 +49,6 @@ class Post:
         except Exception as err:
             self.response_json['success'] = '0'
             self.response_json['message'] = str(err.with_traceback())
-
 
     @staticmethod
     def warp_dic(dic_t):
