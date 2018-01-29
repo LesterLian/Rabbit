@@ -35,7 +35,7 @@ def press(btn_name):
         passport_list.pop(position)
     if btn_name == '开始':
         try:
-            user_file = open('user', 'w')
+            user_file = open('user', 'w', encoding='utf8')
             for passport in passport_list:
                 user_file.write(passport['phone'] + ' ' + passport['pwd'] + '\n')
             user_file.close()
@@ -85,7 +85,7 @@ app = gui("AutoRabbit", "600x300")
 passport_list = []
 # passport_list = gv.passport_list
 try:
-    user_file = open('user', 'r')
+    user_file = open('user', 'r', encoding='utf8')
     for line in user_file.readlines():
         temp = line.split()
         passport_list.append({'phone': temp[0], 'pwd': temp[1]})
