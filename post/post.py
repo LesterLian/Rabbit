@@ -30,7 +30,7 @@ class Post:
         data = self.make_data(self.warp_dic(self.post_dict))
         # TODO maybe move.
         try:
-            response_temp = requests.post(url, data=data, headers=gv.headers)
+            response_temp = requests.post(url, data=data, headers=gv.headers, timeout=5)
             try:
                 response_temp.json()
             except JSONDecodeError:

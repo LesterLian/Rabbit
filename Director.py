@@ -41,9 +41,7 @@ class Director:
     #     time.sleep(0.2)
 
     def do_post(self):
-        # TODO delete
-        # l debug
-        self.log.log('Posting' + ' ' + self.next_step)
+        self.log.log('Beginning' + ' ' + self.next_step)
 
         post_obj = None
         if self.next_step == 'login':
@@ -57,6 +55,7 @@ class Director:
         elif self.next_step == 'cleanFriend':
             post_obj = CleanFriend(self.user, self.log)
         elif self.next_step == 'end':
+            GetFieldInfo(self.user, self.log)
             self.tag = True
             return
 
