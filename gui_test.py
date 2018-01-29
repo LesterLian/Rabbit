@@ -4,29 +4,53 @@
 
 from appJar import gui
 
+
 def launch(win):
     app.showSubWindow(win)
 
-app=gui()
 
-# this is a pop-up
-app.startSubWindow("one", modal=True)
-app.addLabel("l1", "SubWindow One")
-app.stopSubWindow()
+#
+# app=gui()
+#
+# # this is a pop-up
+# app.startSubWindow("one", modal=True)
+# app.addLabel("l1", "SubWindow One")
+# app.stopSubWindow()
+#
+# # this is another pop-up
+# app.startSubWindow("two")
+# app.addLabel("l2", "SubWindow Two")
+# app.stopSubWindow()
+#
+# # these go in the main window
+# app.addButtons(["one", "two"], launch)
+#
+#
+# # add labels & entries
+# app.addLabelSecretEntry('password', 0, 0)
+# app.addLabelNumericEntry('f', 1, 0)
+# app.addLabelOptionBox('y', [1, 2, 3], 1, 3)
+#
+#
+# app.go()
 
-# this is another pop-up
-app.startSubWindow("two")
-app.addLabel("l2", "SubWindow Two")
-app.stopSubWindow()
 
-# these go in the main window
-app.addButtons(["one", "two"], launch)
+from appJar import gui
 
 
-# add labels & entries
-app.addLabelSecretEntry('password', 0, 0)
-app.addLabelNumericEntry('f', 1, 0)
-app.addLabelOptionBox('y', [1, 2, 3], 1, 3)
+def press(btn_name):
+    if btn_name=='test':
+        print(app.getCheckBox("Apples"))
 
+
+app = gui()
+app.setFont(20)
+
+app.addCheckBox("Apples")
+app.addCheckBox("Pears")
+app.addCheckBox("Oranges")
+app.addCheckBox("Kiwis")
+app.addButton('test',press)
+app.setCheckBox("Oranges")
 
 app.go()

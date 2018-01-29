@@ -50,7 +50,6 @@ class Post:
             self.response_json['success'] = '0'
             self.response_json['message'] = str(err.with_traceback())
 
-
     @staticmethod
     def warp_dic(dic_t):
         re = "{"
