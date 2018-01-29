@@ -8,10 +8,15 @@ from user import User
 from post.post import *
 from tomorrow3 import threads
 
+pools_flag = 0
+
 
 # 感觉没效果
 # @threads(100)
 def press(btn_name):
+    global pools_flag
+    pools_flag = 1
+
     if btn_name == '添加':
         app.showSubWindow('password_box')
     if btn_name == 'ok':
@@ -65,6 +70,15 @@ def run(passport):
     # time.sleep(1)
 
 
+def do_pools():
+    global pools_flag
+    if pools_flag == 1:
+        press('开始')
+
+
+# def check_time():
+
+
 # create the GUI & set a title
 app = gui("AutoRabbit", "600x300")
 
@@ -91,7 +105,11 @@ app.addButtons(['添加',
                 '开始'],
                press, 3, 0, 2, 1
                )
+app.addCheckBox('定时', 3, 3)
+# app.addNumericLabelEntry('时间', None, 3, 4)
 app.setStretch("none")
+# app.after(1800000, do_pools)
+# app.after(60000, check_time)
 # pop-up
 app.startSubWindow('password_box', "添加账户", modal=True)
 app.addLabelNumericEntry('帐号', 0, 0)

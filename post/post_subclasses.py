@@ -109,14 +109,14 @@ class HatchField(PostInterface):
                 blank_space = max_num - int(filed_info['chickens'])
                 if blank_space > 0:
                     add_count = egg_count if egg_count < blank_space else blank_space
-                    egg_count -= add_count
                     self.post_dict['fieldId'] = filed_info.get('id')
                     self.post_dict['addCount'] = str(add_count)
                     self.post_obj = Post('hatchField', self.post_dict)
-                    # TODO logic
-
+                    # 如果post成功更新egg_count
                     if not self.check():
                         self.log.log(self.post_obj)
+                    else:
+                        egg_count -= add_count
         # TODO check logic
         # sleep
 
