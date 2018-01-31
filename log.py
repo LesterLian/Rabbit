@@ -8,7 +8,7 @@ from post.post import Post
 class Log:
     def __init__(self, path):
         self.path_to_log = path or 'log'
-        self.file = open(self.path_to_log, 'a')
+        self.file = open(self.path_to_log, 'w', encoding='utf8')
 
     def log(self, message):
         timestamp = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.now())
@@ -28,5 +28,5 @@ class Log:
 
     def clear(self):
         self.file.close()
-        open(self.path_to_log, 'w').close()
-        self.file = open(self.path_to_log, 'a')
+        open(self.path_to_log, 'w', encoding='utf8').close()
+        self.file = open(self.path_to_log, 'a', encoding='utf8')
