@@ -144,6 +144,7 @@ class CleanFriend(PostInterface):
 
         if self.user.data['friends']:
             for friend in self.user.data['friends']:
+                self.successful = True
                 # 还没被清扫
                 if friend['hasClean'] == '0':
                     self.post_dict['friendId'] = friend.get('userId')

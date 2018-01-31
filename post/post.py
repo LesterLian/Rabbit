@@ -7,6 +7,7 @@ from json import JSONDecodeError
 import requests
 from json.decoder import JSONDecodeError
 import global_var as gv
+import sys
 
 
 class Post:
@@ -30,7 +31,7 @@ class Post:
         data = self.make_data(self.warp_dic(self.post_dict))
         # TODO maybe move.
         try:
-            response_temp = requests.post(url, data=data, headers=gv.headers, timeout=5)
+            response_temp = requests.post(url, data=data, headers=gv.headers, timeout=20)
             try:
                 response_temp.json()
             except JSONDecodeError:
@@ -48,7 +49,7 @@ class Post:
             self.response_json['message'] = 'POST TimeOut'
         except Exception as err:
             self.response_json['success'] = '0'
-            self.response_json['message'] = str(err.with_traceback())
+            self.response_json['message'] = str(sys.exc_info())
 
     @staticmethod
     def warp_dic(dic_t):
