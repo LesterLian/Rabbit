@@ -113,3 +113,11 @@ global_var.py
 /cmd/
 
 /POST.py
+/test.py
+.DS_Store
+Mac/
+Win/
+log
+post/.DS_Store
+setup.py
+user
