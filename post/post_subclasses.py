@@ -141,6 +141,7 @@ class CleanFriend(PostInterface):
     def post(self):
         self.check()  # Must be called.
         self.successful = True
+        all_successful = True
 
         if self.user.data['friends']:
             for friend in self.user.data['friends']:
@@ -150,7 +151,9 @@ class CleanFriend(PostInterface):
                     self.post_dict['friendId'] = friend.get('userId')
                     self.post_obj = Post('cleanFriend', self.post_dict)
                     if not self.check():
+                        all_successful = False
                         self.log.log(self.post_obj)
+            self.successful = all_successful
         # l debug
         # print('clean', self.successful)
 

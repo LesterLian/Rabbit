@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # @Author  : Lester
-import Control
 from appJar import gui
 import global_var as gv
 

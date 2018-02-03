@@ -4,7 +4,7 @@
 from post.post import Post
 from post.manager import Manager
 from user import User
-from Director import Director
+from director import Director
 import global_var as gv
 
 userDict = dict()
