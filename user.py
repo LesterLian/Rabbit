@@ -16,3 +16,9 @@ class User:
 
     def find(self, field):
         return self.data[field]
+
+    def has(self, other_key):
+        for key, val in self.data.items():
+            if key == other_key:
+                return True
+        return False

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @author Lester
-from Director import Director
+from director import Director
 from user import User
 
 passport_list = []

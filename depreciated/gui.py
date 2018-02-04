@@ -3,7 +3,7 @@
 # @Author  : Akio
 import time
 from appJar import gui
-from Director import Director
+from director import Director
 from user import User
 from post.post import *
 from tomorrow3 import threads
