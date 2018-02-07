@@ -114,7 +114,6 @@ class Ui_MainWindow(object):
         # self.user_file.close()
 
     def delete_button(self):
-        # TODO implement
         indices = self.table.selectedIndexes()
         rows = list()
         for index in indices:
