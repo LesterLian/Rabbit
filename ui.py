@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtWidgets import QDialog
 from user import User
 from director import Director
-from gui_popup import Ui_Dialog
+from gui_popup2 import Ui_Dialog
 
 
 class Ui_MainWindow(object):
@@ -68,7 +68,7 @@ class Ui_MainWindow(object):
                 temp = line.split()
                 self.passport_list.append({'phone': temp[0], 'pwd': temp[1]})
                 self.table.insertRow(self.table.rowCount())
-                self.table.setItem(self.table.rowCount()-1, 0, QTableWidgetItem(temp[0]))
+                self.table.setItem(self.table.rowCount() - 1, 0, QTableWidgetItem(temp[0]))
                 self.user_file.close()
         except FileNotFoundError:
             print('User File Not Found')
@@ -77,7 +77,7 @@ class Ui_MainWindow(object):
         self.radioButton.setChecked(True)
         self.timer.start(1800000)
 
-        self.pushButton.clicked.connect(lambda: self.add_button())
+        # self.pushButton.clicked.connect(lambda: self.add_button())
         self.pushButton_2.clicked.connect(lambda: self.run_button())
         self.pushButton_3.clicked.connect(lambda: self.delete_button())
         self.timer.timeout.connect(lambda: self.pushButton_2.click())
@@ -99,6 +99,7 @@ class Ui_MainWindow(object):
             self.timer.stop()
 
     def add_button(self):
+        self.dialog.buttonBox.accepted.connect(self.dialog.accept)
         self.dialog.show()
 
         # # TODO real add
@@ -132,9 +133,9 @@ class Ui_MainWindow(object):
             # print(director.user.data)
             # TODO Encapsulate
             self.table.setItem(i, 1, QTableWidgetItem(
-                 '完成' if director.wrong_info == []
-                 else '未完成打扫' if director.wrong_info == ['打扫']
-                 else '失败'))
+                '完成' if director.wrong_info == []
+                else '未完成打扫' if director.wrong_info == ['打扫']
+                else '失败'))
             self.table.setItem(i, 2, QTableWidgetItem(
                 director.user.data['chickenCount']
                 if director.user.has('chickenCount') else ''))
