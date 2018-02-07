@@ -23,7 +23,8 @@ class AppWindow(QMainWindow):
 
     def additem(self):
         phone = self.child.lineEdit.text()
-        # pwd = self.child.lineEdit_2.text()
+        pwd = self.child.lineEdit_2.text()
+        self.ui.passport_list.append({'phone': phone, 'pwd': pwd})
         self.ui.table.insertRow(self.ui.table.rowCount())
         self.ui.table.setItem(self.ui.table.rowCount() - 1, 0, QTableWidgetItem(phone))
         self.child.lineEdit.clear()
