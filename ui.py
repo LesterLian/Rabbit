@@ -51,10 +51,10 @@ class Ui_MainWindow(object):
         self.dialog = Ui_Dialog()
 
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 18))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
+        # self.menubar = QtWidgets.QMenuBar(MainWindow)
+        # self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 18))
+        # self.menubar.setObjectName("menubar")
+        # MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
                 self.passport_list.append({'phone': temp[0], 'pwd': temp[1]})
                 self.table.insertRow(self.table.rowCount())
                 self.table.setItem(self.table.rowCount()-1, 0, QTableWidgetItem(temp[0]))
-                self.user_file.close()
+            self.user_file.close()
         except FileNotFoundError:
             print('User File Not Found')
             self.user_file = open('user', 'w')
@@ -101,7 +101,6 @@ class Ui_MainWindow(object):
     def add_button(self):
         self.dialog.show()
 
-        # # TODO real add
         # phone = '17702201060'
         # pwd = '111111'
         # self.user_file = open('user', 'a')
@@ -114,6 +113,28 @@ class Ui_MainWindow(object):
 
     def delete_button(self):
         # TODO implement
+        indices = self.table.selectedIndexes()
+        rows = list()
+        for index in indices:
+            row = index.row()
+            append = True
+            for row_num in rows:
+                if row_num == row:
+                    append = False
+            if append:
+                rows.insert(0, index.row())
+        for row in rows:
+            self.table.removeRow(row)
+            self.passport_list.pop(row)
+
+        self.user_file = open('user', 'w')
+        for passport in self.passport_list:
+            self.user_file.write(passport['phone'] + ' ' + passport['pwd'] + '\n')
+            # TODO delete
+            # print(passport['phone'] + ' ' + passport['pwd'])
+        self.user_file.close()
+        # TODO delete
+        # print(rows)
         return
 
     def run_button(self):
