@@ -8,8 +8,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QDialog
 from user import User
 from director import Director
+from gui_popup import Ui_Dialog
 
 
 class Ui_MainWindow(object):
@@ -42,7 +44,11 @@ class Ui_MainWindow(object):
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setGeometry(QtCore.QRect(80, 250, 56, 21))
         self.pushButton_3.setObjectName("pushButton_3")
+        self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
+        self.radioButton.setGeometry(QtCore.QRect(420, 250, 61, 23))
+        self.radioButton.setObjectName("radioButton")
         self.timer = QtCore.QTimer()
+        self.dialog = Ui_Dialog(QDialog())
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -68,12 +74,14 @@ class Ui_MainWindow(object):
             print('User File Not Found')
             self.user_file = open('user', 'w')
             self.user_file.close()
+        self.radioButton.setChecked(True)
         self.timer.start(1800000)
 
         self.pushButton.clicked.connect(lambda: self.add_button())
         self.pushButton_2.clicked.connect(lambda: self.run_button())
         self.pushButton_3.clicked.connect(lambda: self.delete_button())
         self.timer.timeout.connect(lambda: self.pushButton_2.click())
+        self.radioButton.toggled.connect(lambda: self.timer_switch())
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -82,18 +90,27 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "添加"))
         self.pushButton_2.setText(_translate("MainWindow", "开始"))
         self.pushButton_3.setText(_translate("MainWindow", "删除"))
+        self.radioButton.setText(_translate("MainWindow", "定时"))
+
+    def timer_switch(self):
+        if self.radioButton.isChecked():
+            self.timer.start(1800000)
+        else:
+            self.timer.stop()
 
     def add_button(self):
-        # TODO real add
-        phone = '17702201060'
-        pwd = '111111'
-        self.user_file = open('user', 'a')
-        self.user_file.write(phone + ' ' + pwd + '\n')
-        self.passport_list = [{'phone': phone, 'pwd': pwd}] + self.passport_list
+        self.dialog.show()
 
-        self.table.insertRow(0)
-        self.table.setItem(0, 0, QTableWidgetItem(phone))
-        self.user_file.close()
+        # # TODO real add
+        # phone = '17702201060'
+        # pwd = '111111'
+        # self.user_file = open('user', 'a')
+        # self.user_file.write(phone + ' ' + pwd + '\n')
+        # self.passport_list = [{'phone': phone, 'pwd': pwd}] + self.passport_list
+        #
+        # self.table.insertRow(0)
+        # self.table.setItem(0, 0, QTableWidgetItem(phone))
+        # self.user_file.close()
 
     def delete_button(self):
         # TODO implement
