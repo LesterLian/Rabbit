@@ -4,7 +4,7 @@
 
 import global_var as gv
 import requests
-import strategies
+from depreciated import strategies
 from collections import OrderedDict
 
 

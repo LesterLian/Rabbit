@@ -107,8 +107,11 @@ class Ui_MainWindow(object):
             user.update(passport)
             director = Director(user)
             director.run()
-            if director.tag == False:
-                return
+            if not director.tag:
+                self.table.setItem(i, 1, QTableWidgetItem('失败'))
+                i += 1
+                print('Director failed')
+                continue
             # print(director.user.data)
             # TODO Encapsulate
             self.table.setItem(i, 1, QTableWidgetItem(

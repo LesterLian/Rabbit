@@ -33,6 +33,7 @@ class Director:
                          err.__str__() +
                          '\n----- End -----'
                          )
+            self.log.close()
             exit(1)
         self.log.close()
 
