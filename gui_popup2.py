@@ -34,42 +34,9 @@ class Ui_Dialog(QDialog):
         self.label_2.setObjectName("label_2")
 
         self.retranslateUi()
-        self.buttonBox.accepted.connect(self.accept)
+        # self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
         QtCore.QMetaObject.connectSlotsByName(self)
-        self.passport_list = []
-        self.add_passport = []
-        try:
-            self.user_file = open('user', 'r')
-            for line in self.user_file.readlines():
-                temp = line.split()
-                self.passport_list.append({'phone': temp[0], 'pwd': temp[1]})
-                self.user_file.close()
-        except FileNotFoundError:
-            print('User File Not Found')
-            self.user_file = open('user', 'w')
-            self.user_file.close()
-
-    def accept(self):
-        flag = 1
-        phone = self.lineEdit.text()
-        pwd = self.lineEdit_2.text()
-        for passport in self.passport_list:
-            if passport['phone'] == phone:
-                flag = 0
-                break
-        if flag == 1:
-            self.passport_list.append({'phone': phone, 'pwd': pwd})
-            self.add_passport.append({'phone': phone, 'pwd': pwd})
-            print('ok')
-            try:
-                user_file = open('user', 'a+')
-                user_file.write(phone + ' ' + pwd + '\n')
-                user_file.close()
-            except FileExistsError:
-                print('file error')
-        if flag == 0:  # todo 增加提示已存在该账号
-            pass
 
     def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
