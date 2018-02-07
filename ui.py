@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         self.radioButton.setGeometry(QtCore.QRect(420, 250, 61, 23))
         self.radioButton.setObjectName("radioButton")
         self.timer = QtCore.QTimer()
-        self.dialog = Ui_Dialog(QDialog())
+        self.dialog = Ui_Dialog()
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
