@@ -7,11 +7,10 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QTableWidgetItem
-from PyQt5.QtWidgets import QDialog
-from user import User
-from director import Director
-from gui_popup2 import Ui_Dialog
+# from PyQt5.QtWidgets import QTableWidgetItem
+# from user import User
+# from director import Director
+# from gui_popup2 import Ui_Dialog
 
 
 class Ui_MainWindow(object):
@@ -47,8 +46,8 @@ class Ui_MainWindow(object):
         self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton.setGeometry(QtCore.QRect(420, 250, 61, 23))
         self.radioButton.setObjectName("radioButton")
-        self.timer = QtCore.QTimer()
-        self.dialog = Ui_Dialog()
+        # self.timer = QtCore.QTimer()
+        # self.dialog = Ui_Dialog()
 
         MainWindow.setCentralWidget(self.centralwidget)
         # self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -60,29 +59,29 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
 
-        self.user_file = None
-        self.passport_list = []
-        try:
-            self.user_file = open('user', 'r')
-            for line in self.user_file.readlines():
-                temp = line.split()
-                self.passport_list.append({'phone': temp[0], 'pwd': temp[1]})
-                self.table.insertRow(self.table.rowCount())
-                self.table.setItem(self.table.rowCount() - 1, 0, QTableWidgetItem(temp[0]))
-                self.user_file.close()
-
-        except FileNotFoundError:
-            print('User File Not Found')
-            self.user_file = open('user', 'w')
-            self.user_file.close()
-        self.radioButton.setChecked(True)
-        self.timer.start(1800000)
+        # self.user_file = None
+        # self.passport_list = []
+        # try:
+        #     self.user_file = open('user', 'r')
+        #     for line in self.user_file.readlines():
+        #         temp = line.split()
+        #         self.passport_list.append({'phone': temp[0], 'pwd': temp[1]})
+        #         self.table.insertRow(self.table.rowCount())
+        #         self.table.setItem(self.table.rowCount() - 1, 0, QTableWidgetItem(temp[0]))
+        #         self.user_file.close()
+        #
+        # except FileNotFoundError:
+        #     print('User File Not Found')
+        #     self.user_file = open('user', 'w')
+        #     self.user_file.close()
+        # self.radioButton.setChecked(True)
+        # self.timer.start(1800000)
 
         # self.pushButton.clicked.connect(lambda: self.add_button())
-        self.pushButton_2.clicked.connect(lambda: self.run_button())
-        self.pushButton_3.clicked.connect(lambda: self.delete_button())
-        self.timer.timeout.connect(lambda: self.pushButton_2.click())
-        self.radioButton.toggled.connect(lambda: self.timer_switch())
+        # self.pushButton_2.clicked.connect(lambda: self.run_button())
+        # self.pushButton_3.clicked.connect(lambda: self.delete_button())
+        # self.timer.timeout.connect(lambda: self.pushButton_2.click())
+        # self.radioButton.toggled.connect(lambda: self.timer_switch())
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -93,15 +92,15 @@ class Ui_MainWindow(object):
         self.pushButton_3.setText(_translate("MainWindow", "删除"))
         self.radioButton.setText(_translate("MainWindow", "定时"))
 
-    def timer_switch(self):
-        if self.radioButton.isChecked():
-            self.timer.start(1800000)
-        else:
-            self.timer.stop()
+    # def timer_switch(self):
+    #     if self.radioButton.isChecked():
+    #         self.timer.start(1800000)
+    #     else:
+    #         self.timer.stop()
 
-    def add_button(self):
-        self.dialog.buttonBox.accepted.connect(self.dialog.accept)
-        self.dialog.show()
+    # def add_button(self):
+    #     self.dialog.buttonBox.accepted.connect(self.dialog.accept)
+    #     self.dialog.show()
 
         # phone = '17702201060'
         # pwd = '111111'
@@ -113,63 +112,63 @@ class Ui_MainWindow(object):
         # self.table.setItem(0, 0, QTableWidgetItem(phone))
         # self.user_file.close()
 
-    def delete_button(self):
-        indices = self.table.selectedIndexes()
-        rows = list()
-        for index in indices:
-            row = index.row()
-            append = True
-            for row_num in rows:
-                if row_num == row:
-                    append = False
-            if append:
-                rows.insert(0, index.row())
-        for row in rows:
-            self.table.removeRow(row)
-            self.passport_list.pop(row)
+    # def delete_button(self):
+    #     indices = self.table.selectedIndexes()
+    #     rows = list()
+    #     for index in indices:
+    #         row = index.row()
+    #         append = True
+    #         for row_num in rows:
+    #             if row_num == row:
+    #                 append = False
+    #         if append:
+    #             rows.insert(0, index.row())
+    #     for row in rows:
+    #         self.table.removeRow(row)
+    #         self.passport_list.pop(row)
+    #
+    #     self.user_file = open('user', 'w')
+    #     for passport in self.passport_list:
+    #         self.user_file.write(passport['phone'] + ' ' + passport['pwd'] + '\n')
+    #         # TODO delete
+    #         # print(passport['phone'] + ' ' + passport['pwd'])
+    #     self.user_file.close()
+    #     # TODO delete
+    #     # print(rows)
+    #     return
 
-        self.user_file = open('user', 'w')
-        for passport in self.passport_list:
-            self.user_file.write(passport['phone'] + ' ' + passport['pwd'] + '\n')
-            # TODO delete
-            # print(passport['phone'] + ' ' + passport['pwd'])
-        self.user_file.close()
-        # TODO delete
-        # print(rows)
-        return
-
-    def run_button(self):
-        self.user_file.close()
-        i = 0
-        for passport in self.passport_list:
-            user = User()
-            user.update(passport)
-            director = Director(user)
-            director.run()
-            if not director.tag:
-                self.table.setItem(i, 1, QTableWidgetItem('失败'))
-                i += 1
-                print('Director failed')
-                continue
-            # print(director.user.data)
-            # TODO Encapsulate
-            self.table.setItem(i, 1, QTableWidgetItem(
-                '完成' if director.wrong_info == []
-                else '未完成打扫' if director.wrong_info == ['打扫']
-                else '失败'))
-            self.table.setItem(i, 2, QTableWidgetItem(
-                director.user.data['chickenCount']
-                if director.user.has('chickenCount') else ''))
-            self.table.setItem(i, 3, QTableWidgetItem(
-                director.user.data['eggCount']
-                if director.user.has('eggCount') else ''
-            ))
-            if director.wrong_info == []:
-                print(director.user.data['phone'] + ": " + "成功" +
-                      " 兔子数：" + director.user.data['chickenCount'])
-
-            else:
-                print(director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) +
-                      " 兔子数：" + director.user.data['chickenCount'])
-            i += 1
-        print('----- 结束 -----')
+    # def run_button(self):
+    #     self.user_file.close()
+    #     i = 0
+    #     for passport in self.passport_list:
+    #         user = User()
+    #         user.update(passport)
+    #         director = Director(user)
+    #         director.run()
+    #         if not director.tag:
+    #             self.table.setItem(i, 1, QTableWidgetItem('失败'))
+    #             i += 1
+    #             print('Director failed')
+    #             continue
+    #         # print(director.user.data)
+    #         # TODO Encapsulate
+    #         self.table.setItem(i, 1, QTableWidgetItem(
+    #             '完成' if director.wrong_info == []
+    #             else '未完成打扫' if director.wrong_info == ['打扫']
+    #             else '失败'))
+    #         self.table.setItem(i, 2, QTableWidgetItem(
+    #             director.user.data['chickenCount']
+    #             if director.user.has('chickenCount') else ''))
+    #         self.table.setItem(i, 3, QTableWidgetItem(
+    #             director.user.data['eggCount']
+    #             if director.user.has('eggCount') else ''
+    #         ))
+    #         if director.wrong_info == []:
+    #             print(director.user.data['phone'] + ": " + "成功" +
+    #                   " 兔子数：" + director.user.data['chickenCount'])
+    #
+    #         else:
+    #             print(director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) +
+    #                   " 兔子数：" + director.user.data['chickenCount'])
+    #         i += 1
+    #     print('----- 结束 -----')
