@@ -32,6 +32,9 @@ class Post:
         # TODO maybe move.
         try:
             response_temp = requests.post(url, data=data, headers=gv.headers, timeout=20)
+            # TODO delete
+            print(data)
+            print(response_temp)
             try:
                 response_temp.json()
             except JSONDecodeError:
