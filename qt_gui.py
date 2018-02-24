@@ -8,6 +8,7 @@ from ui import Ui_MainWindow
 from gui_popup2 import Ui_Dialog
 from user import User
 from director import Director
+from webkit import Browser
 
 
 class AppWindow(QMainWindow):
@@ -19,7 +20,7 @@ class AppWindow(QMainWindow):
         # 读取用户文件
         self.passport_list = []
         self.user_file = None
-        # self.ui.add_passport = []
+
         try:
             self.user_file = open('user', 'r')
             for line in self.user_file.readlines():
@@ -39,7 +40,9 @@ class AppWindow(QMainWindow):
         self.child = Ui_Dialog()
         # 计时器
         self.timer = QtCore.QTimer()
-        # self.ui.setupUi(self)
+        # 网页
+        self.browser = Browser()
+        # 信号-槽
         self.ui.pushButton.clicked.connect(lambda: {self.child.exec_(), self.refresh_table()})
         self.ui.pushButton_2.clicked.connect(lambda: self.run_button())
         self.ui.pushButton_3.clicked.connect(lambda: self.delete_button())
@@ -77,6 +80,8 @@ class AppWindow(QMainWindow):
         i = 0
         for passport in self.passport_list:
             user = User()
+            # TODO new login info
+            passport['afs_token'] = self.browser.get_token()
             user.update(passport)
             director = Director(user)
             director.run()
@@ -122,6 +127,7 @@ class AppWindow(QMainWindow):
             # self.flash_table_passport()
             self.child.lineEdit.clear()
             self.child.lineEdit_2.clear()
+            self.child.lineEdit.setFocus(0)
             try:
                 user_file = open('user', 'a+')
                 user_file.write(phone + ' ' + pwd + '\n')
@@ -176,7 +182,7 @@ class AppWindow(QMainWindow):
                 if phone != self.passport_list[i_current]:
                     self.ui.table.removeRow(i_old)
                 else:
-                    i_old += 1;
+                    i_old += 1
                 i_current += 1
 
 
