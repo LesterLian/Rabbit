@@ -81,6 +81,7 @@ class AppWindow(QMainWindow):
         for passport in self.passport_list:
             user = User()
             # TODO new login info
+            self.browser = Browser()
             passport['afs_token'] = self.browser.get_token()
             user.update(passport)
             director = Director(user)
@@ -163,13 +164,15 @@ class AppWindow(QMainWindow):
         current = len(self.passport_list)
         old = self.ui.table.rowCount()
         if current >= old:
-            print('  ', current)
+            print('Now', current, 'users.')
             for row in range(0, current):
-                print(row, self.passport_list[row]['phone'])
+                # TODO delete
+                # print(row, self.passport_list[row]['phone'])
                 if row >= old:
                     self.ui.table.insertRow(row)
                     self.ui.table.setItem(row, 0, QTableWidgetItem(self.passport_list[row]['phone']))
-                    print('set', self.ui.table.item(row, 0).text())
+                    # TODO delete
+                    # print('set', self.ui.table.item(row, 0).text())
                     continue
                 # 编辑
                 # if phone != self.passport_list[row]:
