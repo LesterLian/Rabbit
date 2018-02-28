@@ -36,10 +36,9 @@ class Browser(QWebEngineView):
         # self.pushButton.clicked.connect(lambda: self.get_token())
 
     def process_token(self, r):
+        # TODO 保证获取token，这个不好使
         while True:
-
-            if r:
-
+            if r != '':
                 self.afs_token = r
                 return
             else:
