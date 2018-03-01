@@ -16,8 +16,8 @@ class Login(PostInterface):
     def init_post_dict(self):
         self.post_dict['phone'] = self.user.data.get('phone')
         self.post_dict['pwd'] = self.user.data.get('pwd')
-        self.post_dict["afs_scene"] = "login"
-        self.post_dict["afs_token"] = self.user.data.get('afs_token')
+        # self.post_dict["afs_scene"] = "login"
+        # self.post_dict["afs_token"] = self.user.data.get('afs_token')
         self.post_dict["type"] = '1'
 
     def success(self):
@@ -91,7 +91,6 @@ class HatchField(PostInterface):
     def __init__(self, user, log):
         GetFieldInfo(user, log)
         super(HatchField, self).__init__(user, log)
-        self.max_num = 3000  # 黄地上限更高
 
     def init_post_dict(self):
         self.post_dict['userId'] = self.user.data.get('userId')
@@ -100,22 +99,22 @@ class HatchField(PostInterface):
         self.post_dict['token'] = self.user.data.get('token')
 
     def post(self):
-        max_num = 3000
         # 对小兔取整数
         egg_count = int(float(self.user.data['eggCount']))
         fields_list = self.user.data['fields']
         self.check()
         self.successful = True
         for filed_info in fields_list:
-            if egg_count > 0 and filed_info['active']:
+            if egg_count > 0 and filed_info['active'] == '1':
                 # 可以孵化位置数量
-                blank_space = max_num - int(filed_info['chickens'])
+                blank_space = (3000 if len(filed_info.get('id')) == 1 else 20000) - int(filed_info['chickens'])
                 if blank_space > 0:
                     add_count = egg_count if egg_count < blank_space else blank_space
                     self.post_dict['fieldId'] = filed_info.get('id')
                     self.post_dict['addCount'] = str(add_count)
                     self.post_obj = Post('hatchField', self.post_dict)
                     # 如果post成功更新egg_count
+                    # TODO 成功检测失误
                     if not self.check():
                         self.log.log(self.post_obj)
                     else:

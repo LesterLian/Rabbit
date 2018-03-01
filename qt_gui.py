@@ -2,8 +2,8 @@
 # @Time    : 1/30/2018 11:32 PM
 # @Author  : Lester
 import sys
-from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt5.QtCore import QDateTime, QTimer
 from ui import Ui_MainWindow
 from gui_popup2 import Ui_Dialog
 from user import User
@@ -39,7 +39,11 @@ class AppWindow(QMainWindow):
         # 弹窗
         self.child = Ui_Dialog()
         # 计时器
-        self.timer = QtCore.QTimer()
+        self.timer = QTimer()
+        # TODO 每天晚上帮下线收兔，再帮他们打扫
+        self.daily_timer = QTimer()
+        # TODO 周一下午要帮下线收兔
+        # self.weekly_timer = QTimer()
         # 网页
         self.browser = Browser()
         # 信号-槽
@@ -48,6 +52,8 @@ class AppWindow(QMainWindow):
         self.ui.pushButton_3.clicked.connect(lambda: self.delete_button())
         self.child.buttonBox.accepted.connect(self.child_accept)
         self.timer.timeout.connect(lambda: self.ui.pushButton_2.click())
+        self.daily_timer.timeout.connect(lambda: {self.ui.pushButton_2.click(), self.daily_timer.start(86400000)})
+        # self.weekly_timer.timeout.connect(lambda: {self.ui.pushButton_2.click(), self.weekly_timer.start(604800000)})
         self.ui.radioButton.toggled.connect(lambda: self.timer_switch())
 
     def delete_button(self):
@@ -78,11 +84,15 @@ class AppWindow(QMainWindow):
     def run_button(self):
         self.user_file.close()
         i = 0
+
         for passport in self.passport_list:
+            if self.ui.table.item(i, 1).text() == '完成' if self.ui.table.item(i, 1) else False:
+                print('跳过')
+                continue
             user = User()
             # TODO new login info
-            self.browser = Browser()
-            passport['afs_token'] = self.browser.get_token()
+            # self.browser = Browser()
+            # passport['afs_token'] = self.browser.get_token()
             user.update(passport)
             director = Director(user)
             director.run()
@@ -147,8 +157,12 @@ class AppWindow(QMainWindow):
     def timer_switch(self):
         if self.ui.radioButton.isChecked():
             self.timer.start(1800000)
+            self.daily_timer.start((16200 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000)
+            # self.weekly_timer.start((525600 - QDateTime.currentDateTime().toTime_t() % 604800) * 1000)
         else:
             self.timer.stop()
+            self.daily_timer.stop()
+            # self.weekly_timer.stop()
 
     # 刷新table
     def flash_table_passport(self):

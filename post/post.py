@@ -33,8 +33,8 @@ class Post:
         try:
             response_temp = requests.post(url, data=data, headers=gv.headers, timeout=20)
             # TODO delete
-            print(data)
-            print(response_temp)
+            print('data: ', data)
+            # print(response_temp)
             try:
                 response_temp.json()
             except JSONDecodeError:
@@ -45,6 +45,7 @@ class Post:
                 self.response_json = response_temp.json()
             else:
                 self.response_json['success'] = '0'
+            print('Response: ', self.response_json)
             if self.response_json['success'] == '1':
                 self.success = True
         except requests.ConnectionError:

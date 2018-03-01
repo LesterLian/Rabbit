@@ -37,6 +37,7 @@ class Browser(QWebEngineView):
 
     def process_token(self, r):
         # TODO 保证获取token，这个不好使
+        print(r)
         while True:
             if r != '':
                 self.afs_token = r
