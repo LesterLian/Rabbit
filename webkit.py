@@ -37,7 +37,7 @@ class Browser(QWebEngineView):
 
     def process_token(self, r):
         # TODO 保证获取token，这个不好使
-        print(r)
+        print('r:', r)
         while True:
             if r != '':
                 self.afs_token = r
@@ -50,6 +50,7 @@ class Browser(QWebEngineView):
     def get_token(self):
 
         self.page.runJavaScript('pointman.getConfig().token', lambda r: self.process_token(r))
+        print('get_token finished')
         return self.afs_token
 
     def disableJS(self):

@@ -35,7 +35,8 @@ class Director:
                          )
             self.log.close()
             exit(1)
-        self.log.close()
+        # TODO check
+        # self.log.close()
 
     # @staticmethod
     # def sleep():
