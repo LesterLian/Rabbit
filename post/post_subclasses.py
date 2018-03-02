@@ -16,8 +16,8 @@ class Login(PostInterface):
     def init_post_dict(self):
         self.post_dict['phone'] = self.user.data.get('phone')
         self.post_dict['pwd'] = self.user.data.get('pwd')
-        # self.post_dict["afs_scene"] = "login"
-        # self.post_dict["afs_token"] = self.user.data.get('afs_token')
+        self.post_dict["afs_scene"] = "login"
+        self.post_dict["afs_token"] = self.user.data.get('afs_token')
         self.post_dict["type"] = '1'
 
     def success(self):

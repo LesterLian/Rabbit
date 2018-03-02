@@ -52,7 +52,9 @@ class AppWindow(QMainWindow):
         self.ui.pushButton_3.clicked.connect(lambda: self.delete_button())
         self.child.buttonBox.accepted.connect(self.child_accept)
         self.timer.timeout.connect(lambda: self.ui.pushButton_2.click())
-        self.daily_timer.timeout.connect(lambda: {self.ui.pushButton_2.click(), self.daily_timer.start(86400000)})
+        self.daily_timer.timeout.connect(lambda: {self.ui.pushButton_2.click(),
+                                                  self.daily_timer.start(86400000),
+                                                  print('daily timer:', self.daily_timer.remainingTime())})
         # self.weekly_timer.timeout.connect(lambda: {self.ui.pushButton_2.click(), self.weekly_timer.start(604800000)})
         self.ui.radioButton.toggled.connect(lambda: self.timer_switch())
 
@@ -86,16 +88,22 @@ class AppWindow(QMainWindow):
         i = 0
 
         for passport in self.passport_list:
+            # 跳过
             if self.ui.table.item(i, 1).text() == '完成' if self.ui.table.item(i, 1) else False:
                 print('跳过')
+                i += 1
                 continue
+            # 初始化
             user = User()
             # TODO new login info
-            # self.browser = Browser()
+            self.browser = Browser()
             # passport['afs_token'] = self.browser.get_token()
+            passport['afs_token'] = self.browser.afs_token
             user.update(passport)
             director = Director(user)
+            # 运行
             director.run()
+            # 回显
             if not director.tag:
                 self.ui.table.setItem(i, 1, QTableWidgetItem('失败'))
                 i += 1
@@ -157,8 +165,9 @@ class AppWindow(QMainWindow):
     def timer_switch(self):
         if self.ui.radioButton.isChecked():
             self.timer.start(1800000)
-            self.daily_timer.start((16200 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000)
-            # self.weekly_timer.start((525600 - QDateTime.currentDateTime().toTime_t() % 604800) * 1000)
+            self.daily_timer.start((55800 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000)
+            print('daily timer:', self.daily_timer.remainingTime())
+            # self.weekly_timer.start((363600 - QDateTime.currentDateTime().toTime_t() % 604800) * 1000)
         else:
             self.timer.stop()
             self.daily_timer.stop()
