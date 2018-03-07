@@ -18,15 +18,17 @@ class AppWindow(QMainWindow):
         self.ui = Ui_MainWindow(self)
 
         # 读取用户文件
-        self.passport_list = []
         self.user_list = []
         self.user_file = None
+
+        # init user
         try:
             self.user_file = open('user', 'r')
             for line in self.user_file.readlines():
                 temp = line.split()
-                print(temp)
-                self.passport_list.append({'id': int(temp[0]), 'phone': temp[1], 'pwd': temp[2], 'isTop': temp[3]})
+                user = User()
+                user.update({'id': int(temp[0]), 'phone': temp[1], 'pwd': temp[2], 'isTop': temp[3]})
+                self.user_list.append(user)
                 # self.ui.table.insertRow(self.ui.table.rowCount())
                 # self.ui.table.setItem(self.ui.table.rowCount() - 1, 0, QTableWidgetItem(temp[0]))
                 self.user_file.close()
@@ -35,7 +37,7 @@ class AppWindow(QMainWindow):
             self.user_file = open('user', 'w')
             self.user_file.close()
 
-        self.init()
+        self.init_table()
 
         # print('refresh')
         # self.refresh_table()
@@ -57,6 +59,7 @@ class AppWindow(QMainWindow):
         self.ui.deleteButton.clicked.connect(lambda: self.delete_button())
         self.child.ButtonBox.accepted.connect(self.child_accept)
         # self.timer.timeout.connect(lambda: self.ui.runButton.click())
+        # todo timer逻辑
         # self.daily_timer.timeout.connect(self.ui.pushButton_2.click(),
         #                                  self.daily_timer.start(86400000),
         #                                  print('daily timer:', self.daily_timer.remainingTime()))
@@ -66,50 +69,32 @@ class AppWindow(QMainWindow):
         self.ui.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.table.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-    def init(self):
-        self.init_user()
-        self.init_table()
-
-    def init_user(self):
-        for passport in self.passport_list:
-            user = User()
-            user.update(passport)
-            self.user_list.append(user)
-        print('len:', len(self.user_list), len(self.passport_list))
-
     def init_table(self):
-        for passport in self.passport_list:
-            self.add_table(passport['id'])  # init table
+        for user in self.user_list:
+            self.add_table(user.data['id'])  # init table
 
-    def update_table(self, row):
-        # todo 失败以及完成状态处理未写
-        user = self.user_list[row]
-        passport = self.passport_list[row]
-        # 初始化
-        user = User()
+    def update_table(self, user):
         # TODO new login info
         self.browser = Browser()
-        # account['afs_token'] = self.browser.get_token()
-        passport['afs_token'] = self.browser.afs_token
-        user.update(passport)
+        # user.data['afs_token'] = self.browser.get_token()
+        user.data['afs_token'] = self.browser.afs_token
         director = Director(user)
         # 运行
         director.run()
         # 回显
         if not director.tag:
-            self.ui.table.setItem(row, 1, QTableWidgetItem('失败'))
-            row += 1
+            self.ui.table.setItem(user.data['id'], 1, QTableWidgetItem('失败'))
             print('Director failed')
         # print(director.user.data)
         # TODO Encapsulate
-        self.ui.table.setItem(row, 1, QTableWidgetItem(
+        self.ui.table.setItem(user.data['id'], 1, QTableWidgetItem(
             '完成' if director.wrong_info == []
             else '未完成打扫' if director.wrong_info == ['打扫']
             else '失败'))
-        self.ui.table.setItem(row, 2, QTableWidgetItem(
+        self.ui.table.setItem(user.data['id'], 2, QTableWidgetItem(
             director.user.data['chickenCount']
             if director.user.has('chickenCount') else ''))
-        self.ui.table.setItem(row, 3, QTableWidgetItem(
+        self.ui.table.setItem(user.data['id'], 3, QTableWidgetItem(
             director.user.data['eggCount']
             if director.user.has('eggCount') else ''
         ))
@@ -120,36 +105,33 @@ class AppWindow(QMainWindow):
         else:
             print(director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) +
                   " 兔子数：" + str(director.user.data))
-        row += 1
 
     def add_table(self, row):
         self.ui.table.insertRow(row)
-        self.ui.table.setItem(row, 0, QTableWidgetItem(self.passport_list[row]['phone']))r
-        self.ui.table.setItem(row, 4, QTableWidgetItem(self.passport_list[row]['isTop']))
+        self.ui.table.setItem(row, 0, QTableWidgetItem(self.user_list[row].data['phone']))
+        self.ui.table.setItem(row, 4, QTableWidgetItem("是" if self.user_list[row].data['isTop'] == '0' else "否"))
 
     def delete_button(self):
         row = self.ui.table.currentRow()
         self.ui.table.removeRow(row)
-        self.passport_list.pop(row)
         self.user_list.pop(row)
         self.refresh_user_file()
 
     def refresh_user_file(self):
         i = 0
         self.user_file = open('user', 'w')
-        for passport in self.passport_list:
-            print(passport['isTop'])
+        for user in self.user_list:
             self.user_file.write(
-                str(i) + ' ' + passport['phone'] +
-                ' ' + passport['pwd'] + ' ' + passport['isTop'] + '\n')
+                user.date['id'] + ' ' + user.data['phone'] +
+                ' ' + user.data['pwd'] + ' ' + user.data['isTop'] + '\n')
             i += 1
         self.user_file.close()
 
-    ## ximi edit
     def daily_work(self):
-        self.daily_timer.start(86400000)
         self.ui.runButton.click()
+        self.daily_timer.start(86400000)
 
+    # deprecated
     def delete_button_old(self):
         indices = self.ui.table.selectedIndexes()
         rows = list()
@@ -172,16 +154,14 @@ class AppWindow(QMainWindow):
 
     def run_button(self):
         # 先下线 再上线
-        for i in range(len(self.user_list)):
-            print('run',self.user_list[i].data['isTop'])
-            if self.user_list[i].data['isTop'] == '0':
-                self.update_table(i)
-                print('isTopTest', self.user_list[i].data['phone'])
-        for i in range(len(self.user_list)):
-            if self.user_list[i].data['isTop'] == '1':
-                self.update_table(i)
-                print('isTopTest', self.user_list[i].data['phone'])
+        for user in self.user_list:
+            if user.data['isTop'] == '0':
+                self.update_table(user)
+        for user in self.user_list:
+            if user.data['isTop'] == '1':
+                self.update_table(user)
 
+    # deprecated
     def run_button_old(self):
         self.user_file.close()
         i = 0
@@ -239,8 +219,8 @@ class AppWindow(QMainWindow):
         if phone == '' or pwd == '':
             flag = 0
 
-        for passport in self.passport_list:
-            if passport['phone'] == phone:
+        for user in self.user_list:
+            if user.data['phone'] == phone:
                 flag = 0
                 break
         if self.child.checkBox_isTop.isChecked():
@@ -254,18 +234,14 @@ class AppWindow(QMainWindow):
             self.child.LineEdit_password.clear()
             self.child.LineEdit_account.setFocus(0)
 
-            # add to passport
-            self.passport_list.append({'phone': phone, 'pwd': pwd,
-                                       'isTop': str(is_top), 'id': len(self.passport_list)})
             # add to user_list
             user = User()
             user.update(({'phone': phone, 'pwd': pwd,
                           'isTop': is_top, 'id': len(self.user_list)}))
             self.user_list.append(user)
             # add to table
-            self.add_table(self.passport_list[-1]['id'])
-            print(self.passport_list)
-            print('user list', self.user_list[-1].__class__, self.passport_list[-1]['id'])
+            self.add_table(self.user_list[-1].data['id'])
+            print('user list', self.user_list[-1].__class__, self.user_list[-1].data['id'])
             try:
                 user_file = open('user', 'a+')
                 user_file.write(str(self.user_list[-1].data['id']) +
@@ -276,11 +252,6 @@ class AppWindow(QMainWindow):
             print('ok')
         else:
             print('重复passport')
-
-    # def add_button(self):
-    #     self.child = Ui_Dialog()
-    #     self.child.buttonBox.accepted.connect(self.child_accept)
-    #     self.child.exec_()
 
     def timer_switch(self):
         if self.ui.radioButton.isChecked():
@@ -293,16 +264,7 @@ class AppWindow(QMainWindow):
             self.daily_timer.stop()
             # self.weekly_timer.stop()
 
-    # 刷新table
-    def flash_table_passport(self):
-        self.ui.table.clearContents()
-        print(self.passport_list)
-        i = 0
-        for passport in self.passport_list:
-            self.ui.table.setItem(i, 0,
-                                  QTableWidgetItem(passport['phone']))
-            i += 1
-
+    # deprecated
     def refresh_table(self):
         current = len(self.passport_list)
         old = self.ui.table.rowCount()
