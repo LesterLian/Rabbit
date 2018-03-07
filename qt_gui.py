@@ -39,7 +39,6 @@ class AppWindow(QMainWindow):
 
         # print('refresh')
         # self.refresh_table()
-        self.init_table()
         # 弹窗
         self.child = Ui_Dialog()
         # 计时器
@@ -120,13 +119,13 @@ class AppWindow(QMainWindow):
 
         else:
             print(director.user.data['phone'] + ": " + "失败" + str(director.wrong_info) +
-                  " 兔子数：" + director.user.data['chickenCount'])
+                  " 兔子数：" + str(director.user.data))
         row += 1
 
     def add_table(self, row):
         self.ui.table.insertRow(row)
-        self.ui.table.setItem(row, 0, QTableWidgetItem(self.passport_list[row]['phone']))
-        self.ui.table.setItem(row, 1, QTableWidgetItem(self.passport_list[row]['isTop']))
+        self.ui.table.setItem(row, 0, QTableWidgetItem(self.passport_list[row]['phone']))r
+        self.ui.table.setItem(row, 4, QTableWidgetItem(self.passport_list[row]['isTop']))
 
     def delete_button(self):
         row = self.ui.table.currentRow()
