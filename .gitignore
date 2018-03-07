@@ -121,3 +121,4 @@ log
 post/.DS_Store
 setup.py
 user
+/user2
