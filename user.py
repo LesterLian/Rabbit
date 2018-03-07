@@ -9,7 +9,7 @@ L = threading.Lock()  # 引入锁
 class User:
     def __init__(self):
         self.data = dict()
-
+        # id phone pwd isTop
     def update(self, new_data):
         for key, val in new_data.items():
             self.data[key] = val
