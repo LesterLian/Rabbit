@@ -7,6 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+
 # from PyQt5.QtWidgets import QTableWidgetItem
 # from user import User
 # from director import Director
@@ -31,18 +33,18 @@ class Ui_MainWindow(object):
         self.table.setGeometry(QtCore.QRect(0, 0, 800, 231))
         self.table.setObjectName("tableView")
         self.table.setRowCount(0)
-        self.table.setColumnCount(4)
-        self.table.setHorizontalHeaderLabels(['账号', '状态', '兔子数', '兔仔数'])
+        self.table.setColumnCount(5)
+        self.table.setHorizontalHeaderLabels(['账号', '下线', '状态', '兔子数', '兔仔数'])
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(10, 250, 56, 21))
-        self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(300, 250, 56, 21))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(80, 250, 56, 21))
-        self.pushButton_3.setObjectName("pushButton_3")
+        self.popButton = QtWidgets.QPushButton(self.centralwidget)
+        self.popButton.setGeometry(QtCore.QRect(10, 250, 56, 21))
+        self.popButton.setObjectName("pushButton")
+        self.runButton = QtWidgets.QPushButton(self.centralwidget)
+        self.runButton.setGeometry(QtCore.QRect(300, 250, 56, 21))
+        self.runButton.setObjectName("pushButton_2")
+        self.deleteButton = QtWidgets.QPushButton(self.centralwidget)
+        self.deleteButton.setGeometry(QtCore.QRect(80, 250, 56, 21))
+        self.deleteButton.setObjectName("pushButton_3")
         self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
         self.radioButton.setGeometry(QtCore.QRect(420, 250, 61, 23))
         self.radioButton.setObjectName("radioButton")
@@ -87,9 +89,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "AutoRabbit"))
-        self.pushButton.setText(_translate("MainWindow", "添加"))
-        self.pushButton_2.setText(_translate("MainWindow", "开始"))
-        self.pushButton_3.setText(_translate("MainWindow", "删除"))
+        self.popButton.setText(_translate("MainWindow", "添加"))
+        self.runButton.setText(_translate("MainWindow", "开始"))
+        self.deleteButton.setText(_translate("MainWindow", "删除"))
         self.radioButton.setText(_translate("MainWindow", "定时"))
 
     # def timer_switch(self):
@@ -102,15 +104,15 @@ class Ui_MainWindow(object):
     #     self.dialog.buttonBox.accepted.connect(self.dialog.accept)
     #     self.dialog.show()
 
-        # phone = '17702201060'
-        # pwd = '111111'
-        # self.user_file = open('user', 'a')
-        # self.user_file.write(phone + ' ' + pwd + '\n')
-        # self.passport_list = [{'phone': phone, 'pwd': pwd}] + self.passport_list
-        #
-        # self.table.insertRow(0)
-        # self.table.setItem(0, 0, QTableWidgetItem(phone))
-        # self.user_file.close()
+    # phone = '17702201060'
+    # pwd = '111111'
+    # self.user_file = open('user', 'a')
+    # self.user_file.write(phone + ' ' + pwd + '\n')
+    # self.passport_list = [{'phone': phone, 'pwd': pwd}] + self.passport_list
+    #
+    # self.table.insertRow(0)
+    # self.table.setItem(0, 0, QTableWidgetItem(phone))
+    # self.user_file.close()
 
     # def delete_button(self):
     #     indices = self.table.selectedIndexes()
