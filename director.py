@@ -19,7 +19,7 @@ class Director:
         self.tag = False
         self.wrong_info = []
         # TODO decide where to create and close log
-        self.log = Log('log')
+        self.log = Log()
         self.log.log('Running ' + self.user.data['phone'])
 
     def run(self):
@@ -36,7 +36,7 @@ class Director:
             self.log.close()
             exit(1)
         # TODO check
-        # self.log.close()
+        self.log.flush()
 
     # @staticmethod
     # def sleep():
