@@ -58,13 +58,15 @@ class AppWindow(QMainWindow):
         self.ui.runButton.clicked.connect(lambda: self.run_button(0))
         self.ui.deleteButton.clicked.connect(lambda: self.delete_button())
         self.child.ButtonBox.accepted.connect(self.child_accept)
-        self.timer.timeout.connect(lambda: self.run_button(1))
+        # self.timer.timeout.connect(self.run_button(1))
         # todo timer逻辑
-        # self.daily_timer.timeout.connect(self.ui.pushButton_2.click(),
-        #                                  self.daily_timer.start(86400000),
-        #                                  print('daily timer:', self.daily_timer.remainingTime()))
+        self.daily_timer.timeout.connect(lambda: {self.run_button(0),
+                                         self.daily_timer.start(86400000),
+                                         print('daily timer:', self.daily_timer.remainingTime())})
         # self.daily_timer.timeout.connect(self.daily_work())
-        # self.weekly_timer.timeout.connect(lambda: {self.ui.pushButton_2.click(), self.weekly_timer.start(604800000)})
+        self.weekly_timer.timeout.connect(lambda: {self.run_button(0),
+                                                   self.weekly_timer.start(604800000),
+                                                   print('weekly timer:', self.weekly_timer.remainingTime())})
         self.ui.radioButton.toggled.connect(lambda: self.timer_switch())
         self.ui.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -269,11 +271,11 @@ class AppWindow(QMainWindow):
             self.timer.start(1800000)
             self.daily_timer.start((55800 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000)
             print('daily timer:', self.daily_timer.remainingTime())
-            # self.weekly_timer.start((363600 - QDateTime.currentDateTime().toTime_t() % 604800) * 1000)
+            self.weekly_timer.start((363600 - QDateTime.currentDateTime().toTime_t() % 604800) * 1000)
         else:
             self.timer.stop()
             self.daily_timer.stop()
-            # self.weekly_timer.stop()
+            self.weekly_timer.stop()
 
     # deprecated
     # def refresh_table(self):
