@@ -63,6 +63,11 @@ class AppWindow(QMainWindow):
         self.daily_timer.timeout.connect(lambda: {self.run_button(0),
                                          self.daily_timer.start(86400000),
                                          print('daily timer:', self.daily_timer.remainingTime())})
+        # self.timer.timeout.connect(lambda: self.ui.runButton.click())
+        # todo timer逻辑
+        # self.daily_timer.timeout.connect(self.ui.pushButton_2.click(),
+        #                                  self.daily_timer.start(86400000),
+        #                                  print('daily timer:', self.daily_timer.remainingTime()))
         # self.daily_timer.timeout.connect(self.daily_work())
         self.weekly_timer.timeout.connect(lambda: {self.run_button(0),
                                                    self.weekly_timer.start(604800000),
@@ -112,7 +117,6 @@ class AppWindow(QMainWindow):
         else:
             print(user.find('phone') + ": " + "失败" + str(director.wrong_info) +
                   " 兔子数：" + str(user.find('chickenCount')) if user.has('chickenCount') else '')
-
     def add_table(self, row):
         self.ui.table.insertRow(row)
         self.ui.table.setItem(row, 0, QTableWidgetItem(self.user_list[row].data['phone']))
@@ -276,7 +280,6 @@ class AppWindow(QMainWindow):
             self.timer.stop()
             self.daily_timer.stop()
             self.weekly_timer.stop()
-
     # deprecated
     # def refresh_table(self):
     #     current = len(self.passport_list)
