@@ -48,4 +48,4 @@ class Ui_Dialog(QDialog):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.label.setText(_translate("Dialog", "账号"))
         self.label_2.setText(_translate("Dialog", "密码"))
-        self.checkBox_isTop.setText(_translate("Dialog", "是否为下线"))
+        self.checkBox_isTop.setText(_translate("Dialog", "是否为下级"))

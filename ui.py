@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.table.setObjectName("tableView")
         self.table.setRowCount(0)
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(['账号', '状态', '兔子数', '兔仔数', '下线'])
+        self.table.setHorizontalHeaderLabels(['账号', '状态', '兔子数', '兔仔数', '下级'])
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.popButton = QtWidgets.QPushButton(self.centralwidget)
         self.popButton.setGeometry(QtCore.QRect(10, 250, 56, 21))
