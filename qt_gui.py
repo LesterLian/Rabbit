@@ -258,9 +258,9 @@ class AppWindow(QMainWindow):
                 flag = 0
                 break
         if self.child.checkBox_isTop.isChecked():
-            is_top = 0
+            is_top = '0'
         else:
-            is_top = 1
+            is_top = '1'
         if flag == 1:
             # self.ui.table.insertRow(self.ui.table.rowCount())
             # self.flash_table_passport()

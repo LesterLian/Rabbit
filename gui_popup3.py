@@ -24,6 +24,7 @@ class Ui_Dialog(QDialog):
         self.LineEdit_account = QtWidgets.QLineEdit(self)
         self.LineEdit_account.setGeometry(QtCore.QRect(70, 20, 311, 31))
         self.LineEdit_account.setObjectName("lineEdit")
+        self.LineEdit_account.setFocus(0)
         self.LineEdit_password = QtWidgets.QLineEdit(self)
         self.LineEdit_password.setGeometry(QtCore.QRect(70, 70, 311, 31))
         self.LineEdit_password.setObjectName("lineEdit_2")
