@@ -9,6 +9,11 @@ Personal project practicing Python http POST.
 
 # Update Log
 
+--- 0.0.3 ---
+
+修复添加后的用户不能马上运行
+修复添加窗口默认高亮
+
 --- 0.0.2 ---
 
 修复添加功能
