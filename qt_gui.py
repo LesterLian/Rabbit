@@ -48,7 +48,9 @@ class AppWindow(QMainWindow):
         # TODO 每天晚上帮下线收兔，再帮他们打扫
         self.daily_timer = QTimer()
         # TODO 周一下午要帮下线收兔
-        # self.weekly_timer = QTimer()
+        self.weekly_timer = QTimer()
+        # 每日清楚计时
+        self.clear_timer = QTimer()
         # 网页
         self.browser = Browser()
         # 信号-槽
@@ -57,21 +59,34 @@ class AppWindow(QMainWindow):
         self.ui.popButton.clicked.connect(lambda: self.child.exec_())
         self.ui.runButton.clicked.connect(lambda: self.run_button(0))
         self.ui.deleteButton.clicked.connect(lambda: self.delete_button())
-        self.child.ButtonBox.accepted.connect(self.child_accept)
-        # self.timer.timeout.connect(self.run_button(1))
-        # todo timer逻辑
-        self.daily_timer.timeout.connect(lambda: {self.run_button(0),
-                                         self.daily_timer.start(86400000),
-                                         print('daily timer:', self.daily_timer.remainingTime())})
-        # self.timer.timeout.connect(lambda: self.ui.runButton.click())
-        # todo timer逻辑
-        # self.daily_timer.timeout.connect(self.ui.pushButton_2.click(),
-        #                                  self.daily_timer.start(86400000),
-        #                                  print('daily timer:', self.daily_timer.remainingTime()))
+        self.child.ButtonBox.accepted.connect(lambda: self.child_accept())
+        # todo 检查timer逻辑
+        self.timer.timeout.connect(lambda: self.run_button(1))
+        self.daily_timer.timeout.connect(lambda: {
+            # 停止当前timer
+            self.daily_timer.stop(),
+            self.timer.stop(),
+            self.run_button(0),
+            # timing至第二天0300
+            self.clear_timer.start((115200 - QDateTime.currentDateTime() % 86400) * 1000)
+        })
         # self.daily_timer.timeout.connect(self.daily_work())
-        self.weekly_timer.timeout.connect(lambda: {self.run_button(0),
-                                                   self.weekly_timer.start(604800000),
-                                                   print('weekly timer:', self.weekly_timer.remainingTime())})
+        self.weekly_timer.timeout.connect(lambda: {
+            # 停止当前timer
+            self.weekly_timer.stop(),
+            self.daily_timer.stop(),
+            self.timer.stop(),
+            self.run_button(0),
+            # timing至第二天0300
+            self.clear_timer.start((115200 - QDateTime.currentDateTime() % 86400) * 1000)
+        })
+        self.clear_timer.timeout.connect(lambda: {
+            # 每天0300
+            # 重新开启daily, weekly timer
+            self.timer_switch(),
+            # 清空完成状态
+            self.clear_completion()
+        })
         self.ui.radioButton.toggled.connect(lambda: self.timer_switch())
         self.ui.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -87,7 +102,7 @@ class AppWindow(QMainWindow):
             print('跳过')
             return
         # TODO afs_token
-        self.browser = Browser()
+        # self.browser = Browser()
         # user.data['afs_token'] = self.browser.get_token()
         user.update({'afs_token': self.browser.afs_token})
         director = Director(user)
@@ -117,6 +132,7 @@ class AppWindow(QMainWindow):
         else:
             print(user.find('phone') + ": " + "失败" + str(director.wrong_info) +
                   " 兔子数：" + str(user.find('chickenCount')) if user.has('chickenCount') else '')
+
     def add_table(self, row):
         self.ui.table.insertRow(row)
         self.ui.table.setItem(row, 0, QTableWidgetItem(self.user_list[row].data['phone']))
@@ -271,15 +287,32 @@ class AppWindow(QMainWindow):
             print('重复passport')
 
     def timer_switch(self):
+        daily = (55800 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000
+        weekly = (363600 - QDateTime.currentDateTime().toTime_t() % 604800) * 1000
+        if daily < 0:
+            self.ui.radioButton.click()
+            return
         if self.ui.radioButton.isChecked():
             self.timer.start(1800000)
-            self.daily_timer.start((55800 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000)
+            self.daily_timer.start(daily)
             print('daily timer:', self.daily_timer.remainingTime())
-            self.weekly_timer.start((363600 - QDateTime.currentDateTime().toTime_t() % 604800) * 1000)
+            if weekly < 0:
+                print("weekly not started")
+            else:
+                self.weekly_timer.start(weekly)
+                print('weekly timer:', self.weekly_timer.remainingTime())
         else:
             self.timer.stop()
             self.daily_timer.stop()
             self.weekly_timer.stop()
+            self.clear_timer.stop()
+
+    def clear_completion(self):
+        for row in range(len(self.user_list)):
+            user = self.user_list[row]
+            user.update({'completed': ""})
+            self.ui.table.setItem(row, 1, QTableWidgetItem(""))
+
     # deprecated
     # def refresh_table(self):
     #     current = len(self.passport_list)
