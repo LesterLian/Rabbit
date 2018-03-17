@@ -59,7 +59,7 @@ class AppWindow(QMainWindow):
         self.ui.popButton.clicked.connect(lambda: self.child.exec_())
         self.ui.runButton.clicked.connect(lambda: self.run_button(0))
         self.ui.deleteButton.clicked.connect(lambda: self.delete_button())
-        self.child.ButtonBox.accepted.connect(lambda: self.child_accept)
+        self.child.ButtonBox.accepted.connect(lambda: self.child_accept())
         # todo 检查timer逻辑
         self.timer.timeout.connect(lambda: self.run_button(1))
         self.daily_timer.timeout.connect(lambda: {
