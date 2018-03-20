@@ -9,13 +9,13 @@ from global_var import tasks
 #         return {'friendId': ""}  # for test only, should be implemented in other ways
 #     elif command == 'getFieldEggs':
 #         re = {'fieldIdList': []}
-#         for field in user.find('fields'):
+#         for field in user.get('fields'):
 #             if field['active'] == '1':
 #                 re['hasEgg'] = '1'
 #                 re['fieldIdList'] += [field['id']]
 #         user.update(re)
 #         return re
 #     elif command == 'getHatchCount':
-#         if user.find('hasEgg') == '1':
+#         if user.get('hasEgg') == '1':
 #
 #     elif command == 'hatchField':

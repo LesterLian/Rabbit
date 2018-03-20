@@ -4,13 +4,14 @@
 # import time
 
 # from post.post import *
+
 from post.post_subclasses import *
 from log import Log
 import traceback
 import sys
 
 
-class Director:
+class Director():
 
     def __init__(self, user):
         self.user = user

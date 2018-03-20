@@ -14,10 +14,10 @@ class Login(PostInterface):
         self.check()
 
     def init_post_dict(self):
-        self.post_dict['phone'] = self.user.data.get('phone')
-        self.post_dict['pwd'] = self.user.data.get('pwd')
+        self.post_dict['phone'] = self.user.get('phone')
+        self.post_dict['pwd'] = self.user.get('pwd')
         self.post_dict["afs_scene"] = "login"
-        self.post_dict["afs_token"] = self.user.data.get('afs_token')
+        self.post_dict["afs_token"] = self.user.get('afs_token')
         self.post_dict["type"] = '1'
 
     def success(self):
@@ -36,8 +36,8 @@ class GetRatio(PostInterface):
         super(GetRatio, self).__init__(user, log)
 
     def init_post_dict(self):
-        self.post_dict['userId'] = self.user.data.get('userId')
-        self.post_dict['token'] = self.user.data.get('token')
+        self.post_dict['userId'] = self.user.get('userId')
+        self.post_dict['token'] = self.user.get('token')
 
     def post(self):
         self.post_obj = Post('getRatio', self.post_dict, 'chickenCount')  # , 'ratios'
@@ -59,14 +59,14 @@ class GetFieldEggs(PostInterface):
         super(GetFieldEggs, self).__init__(user, log)
 
     def init_post_dict(self):
-        self.post_dict['userId'] = self.user.data.get('userId')
+        self.post_dict['userId'] = self.user.get('userId')
         self.post_dict['fieldId'] = 'need id'
-        self.post_dict['token'] = self.user.data.get('token')
+        self.post_dict['token'] = self.user.get('token')
 
     def post(self):
         self.check()  # Must be called.
         self.successful = True
-        fields_list = self.user.data['fields']
+        fields_list = self.user.get('fields')
 
         for filed_info in fields_list:
             if filed_info['hasEgg'] == '1':
@@ -93,15 +93,15 @@ class HatchField(PostInterface):
         super(HatchField, self).__init__(user, log)
 
     def init_post_dict(self):
-        self.post_dict['userId'] = self.user.data.get('userId')
+        self.post_dict['userId'] = self.user.get('userId')
         self.post_dict['fieldId'] = 'need id'
         self.post_dict['addCount'] = 'need count'
-        self.post_dict['token'] = self.user.data.get('token')
+        self.post_dict['token'] = self.user.get('token')
 
     def post(self):
         # 对小兔取整数
-        egg_count = int(float(self.user.data['eggCount']))
-        fields_list = self.user.data['fields']
+        egg_count = int(float(self.user.get('eggCount')))
+        fields_list = self.user.get('fields')
         self.check()
         self.successful = True
         for filed_info in fields_list:
@@ -136,17 +136,17 @@ class CleanFriend(PostInterface):
         super(CleanFriend, self).__init__(user, log)
 
     def init_post_dict(self):
-        self.post_dict['userId'] = self.user.data.get('userId')
+        self.post_dict['userId'] = self.user.get('userId')
         self.post_dict['friendId'] = 'need friend id'
-        self.post_dict['token'] = self.user.data.get('token')
+        self.post_dict['token'] = self.user.get('token')
 
     def post(self):
         self.check()  # Must be called.
         self.successful = True
         all_successful = True
 
-        if self.user.data['friends']:
-            for friend in self.user.data['friends']:
+        if self.user.get('friends'):
+            for friend in self.user.get('friends'):
                 self.successful = True
                 # 还没被清扫
                 if friend['hasClean'] == '0':
@@ -172,8 +172,9 @@ class GetFriendList(PostInterface):
         super(GetFriendList, self).__init__(user, log)
 
     def init_post_dict(self):
-        self.post_dict['userId'] = self.user.data.get('userId')
-        self.post_dict['token'] = self.user.data.get('token')
+        self.post_dict['userId'] = self.user.get('userId')
+        self.post_dict['token'] = self.user.\
+            get('token')
 
     def post(self):
         self.post_obj = Post('getFriendList', self.post_dict, 'friends')
@@ -195,10 +196,10 @@ class GetFieldInfo(PostInterface):
         super(GetFieldInfo, self).__init__(user, log)
 
     def init_post_dict(self):
-        self.post_dict['userId'] = self.user.data.get('userId')
+        self.post_dict['userId'] = self.user.get('userId')
         # 好友信息是拜访用的
         self.post_dict['friendId'] = ''
-        self.post_dict['token'] = self.user.data.get('token')
+        self.post_dict['token'] = self.user.get('token')
 
     def post(self):
         self.post_obj = Post('getFieldInfo', self.post_dict, 'chickenCount', 'eggCount', 'fields')
