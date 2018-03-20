@@ -63,6 +63,7 @@ class Director():
             return
 
         self.next_step = post_obj.next_step
+        # TODO 确保没有多余和重复wrong_info
         if not post_obj.wrong_info == '':
             self.wrong_num += 1
             self.wrong_info.append(post_obj.wrong_info)

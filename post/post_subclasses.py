@@ -205,6 +205,7 @@ class GetFieldInfo(PostInterface):
         self.post_obj = Post('getFieldInfo', self.post_dict, 'chickenCount', 'eggCount', 'fields')
         self.check()
 
+    # TODO handle failure
     def success(self):
         response_dic = self.post_obj.get_response_dic()
         # 作为终端没有下一步指令，只update数据
