@@ -186,6 +186,7 @@ class AppWindow(QMainWindow):
 
     def run_button(self, periodic):
         # periodic: 0: no timer, daily, weekly; 1: normal timer
+        self.ui.table.setItem(0, 0, QTableWidgetItem("test"))
         if periodic == 0:
             # 先下线 再上线
             for row in range(len(self.user_list)):
@@ -290,9 +291,10 @@ class AppWindow(QMainWindow):
         daily = (55800 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000
         weekly = (363600 - QDateTime.currentDateTime().toTime_t() % 604800) * 1000
         if daily < 0:
-            self.ui.radioButton.click()
+            self.ui.radioButton.setChecked(False)
             return
         if self.ui.radioButton.isChecked():
+            self.run_button(1)
             self.timer.start(1800000)
             self.daily_timer.start(daily)
             print('daily timer:', self.daily_timer.remainingTime())
