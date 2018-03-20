@@ -9,6 +9,8 @@ from ui import Ui_MainWindow
 from user import User
 from director import Director
 from webkit import Browser
+from thread import MyThread
+from time import sleep
 
 
 class AppWindow(QMainWindow):
@@ -101,37 +103,40 @@ class AppWindow(QMainWindow):
         if user.find('completed') == '完成' if user.has('completed') else False:
             print('跳过')
             return
-        # TODO afs_token
-        # self.browser = Browser()
-        # user.data['afs_token'] = self.browser.get_token()
-        user.update({'afs_token': self.browser.afs_token})
-        director = Director(user)
-        # 运行
-        director.run()
-        # 回显
-        if not director.tag:
-            self.ui.table.setItem(row, 1, QTableWidgetItem('失败'))
-            user.update({'completed': '失败'})
-            print('Director failed')
-        # print(director.user.data)
-        # TODO Encapsulate
-        completed = '完成' if director.wrong_info == [] else '未完成打扫' if director.wrong_info == ['打扫'] else '失败'
-        self.ui.table.setItem(row, 1, QTableWidgetItem(completed))
-        user.update({'completed': completed})
-        self.ui.table.setItem(row, 2, QTableWidgetItem(
-            user.find('chickenCount')
-            if user.has('chickenCount') else ''))
-        self.ui.table.setItem(row, 3, QTableWidgetItem(
-            user.find('eggCount')
-            if user.has('eggCount') else ''
-        ))
-        if not director.wrong_info:
-            print(user.find('phone') + ": " + "成功" +
-                  " 兔子数：" + user.find('chickenCount'))
+        # # TODO afs_token
+        # # self.browser = Browser()
+        # # user.data['afs_token'] = self.browser.get_token()
+        # user.update({'afs_token': self.browser.afs_token})
+        # director = Director(user)
+        # # 运行
+        # director.run()
+        # # 回显
+        # if not director.tag:
+        #     self.ui.table.setItem(row, 1, QTableWidgetItem('失败'))
+        #     user.update({'completed': '失败'})
+        #     print('Director failed')
+        # # print(director.user.data)
+        # # TODO Encapsulate
+        # completed = '完成' if director.wrong_info == [] else '未完成打扫' if director.wrong_info == ['打扫'] else '失败'
+        # self.ui.table.setItem(row, 1, QTableWidgetItem(completed))
+        # user.update({'completed': completed})
+        # self.ui.table.setItem(row, 2, QTableWidgetItem(
+        #     user.find('chickenCount')
+        #     if user.has('chickenCount') else ''))
+        # self.ui.table.setItem(row, 3, QTableWidgetItem(
+        #     user.find('eggCount')
+        #     if user.has('eggCount') else ''
+        # ))
+        # if not director.wrong_info:
+        #     print(user.find('phone') + ": " + "成功" +
+        #           " 兔子数：" + user.find('chickenCount'))
+        #
+        # else:
+        #     print(user.find('phone') + ": " + "失败" + str(director.wrong_info) +
+        #           " 兔子数：" + str(user.find('chickenCount')) if user.has('chickenCount') else '')
 
-        else:
-            print(user.find('phone') + ": " + "失败" + str(director.wrong_info) +
-                  " 兔子数：" + str(user.find('chickenCount')) if user.has('chickenCount') else '')
+        self.ui.table.setItem(row, 1, QTableWidgetItem('processed'))
+        sleep(3)
 
     def add_table(self, row):
         self.ui.table.insertRow(row)
@@ -191,10 +196,11 @@ class AppWindow(QMainWindow):
             # 先下线 再上线
             for row in range(len(self.user_list)):
                 if self.user_list[row].find('isTop') == '0':
-                    self.update_table(row)
+                    MyThread(lambda: self.update_table(row)).start()
+
         for row in range(len(self.user_list)):
             if self.user_list[row].find('isTop') == '1':
-                self.update_table(row)
+                MyThread(lambda: self.update_table(row)).start()
 
     # deprecated
     # def run_button_old(self):
