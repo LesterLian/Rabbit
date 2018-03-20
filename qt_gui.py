@@ -2,8 +2,10 @@
 # @Time    : 1/30/2018 11:32 PM
 # @Author  : Lester
 import sys
+from threading import Thread
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QAbstractItemView
-from PyQt5.QtCore import QDateTime, QTimer
+from PyQt5.QtCore import QDateTime, QTimer, QThread, pyqtSignal
 from gui_popup3 import Ui_Dialog
 from ui import Ui_MainWindow
 from user import User
@@ -98,7 +100,7 @@ class AppWindow(QMainWindow):
     def update_table(self, row):
         user = self.user_list[row]
         # 跳过
-        if user.find('completed') == '完成' if user.has('completed') else False:
+        if user.get('completed') == '完成' if user.has('completed') else False:
             print('跳过')
             return
         # TODO afs_token
@@ -119,19 +121,19 @@ class AppWindow(QMainWindow):
         self.ui.table.setItem(row, 1, QTableWidgetItem(completed))
         user.update({'completed': completed})
         self.ui.table.setItem(row, 2, QTableWidgetItem(
-            user.find('chickenCount')
+            user.get('chickenCount')
             if user.has('chickenCount') else ''))
         self.ui.table.setItem(row, 3, QTableWidgetItem(
-            user.find('eggCount')
+            user.get('eggCount')
             if user.has('eggCount') else ''
         ))
         if not director.wrong_info:
-            print(user.find('phone') + ": " + "成功" +
-                  " 兔子数：" + user.find('chickenCount'))
+            print(user.get('phone') + ": " + "成功" +
+                  " 兔子数：" + user.get('chickenCount'))
 
         else:
-            print(user.find('phone') + ": " + "失败" + str(director.wrong_info) +
-                  " 兔子数：" + str(user.find('chickenCount')) if user.has('chickenCount') else '')
+            print(user.get('phone') + ": " + "失败" + str(director.wrong_info) +
+                  " 兔子数：" + str(user.get('chickenCount')) if user.has('chickenCount') else '')
 
     def add_table(self, row):
         self.ui.table.insertRow(row)
@@ -155,8 +157,8 @@ class AppWindow(QMainWindow):
         self.user_file = open('user', 'w')
         for user in self.user_list:
             self.user_file.write(
-                user.find('phone') +
-                ' ' + user.find('pwd') + ' ' + user.find('isTop') + '\n')
+                user.get('phone') +
+                ' ' + user.get('pwd') + ' ' + user.get('isTop') + '\n')
         self.user_file.close()
 
     def daily_work(self):
@@ -189,10 +191,10 @@ class AppWindow(QMainWindow):
         if periodic == 0:
             # 先下线 再上线
             for row in range(len(self.user_list)):
-                if self.user_list[row].find('isTop') == '0':
+                if self.user_list[row].get('isTop') == '0':
                     self.update_table(row)
         for row in range(len(self.user_list)):
-            if self.user_list[row].find('isTop') == '1':
+            if self.user_list[row].get('isTop') == '1':
                 self.update_table(row)
 
     # deprecated
@@ -254,7 +256,7 @@ class AppWindow(QMainWindow):
             flag = 0
 
         for user in self.user_list:
-            if user.find('phone') == phone:
+            if user.get('phone') == phone:
                 flag = 0
                 break
         if self.child.checkBox_isTop.isChecked():

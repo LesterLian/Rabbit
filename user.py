@@ -15,8 +15,11 @@ class User:
         for key, val in new_data.items():
             self.data[key] = val
 
-    def find(self, field):
-        return self.data[field]
+    def get(self, field):
+        if self.has(field):
+            return self.data[field]
+        else:
+            return None
 
     def has(self, other_key):
         for key, val in self.data.items():

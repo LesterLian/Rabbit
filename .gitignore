@@ -122,3 +122,6 @@ post/.DS_Store
 setup.py
 user
 /user2
+/user all
+/logging/
+/Logs/
