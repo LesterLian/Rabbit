@@ -9,7 +9,7 @@ from ui import Ui_MainWindow
 from user import User
 from director import Director
 from webkit import Browser
-from thread import MyThread
+from mythread import MyThread
 from time import sleep
 
 
