@@ -81,7 +81,7 @@ class AppWindow(QMainWindow):
             self.timer.stop(),
             self.timer_process_user(0),
             # timing至第二天0300
-            self.clear_timer.start((115200 - QDateTime.currentDateTime() % 86400) * 1000)
+            self.clear_timer.start((115200 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000)
         })
         # self.daily_timer.timeout.connect(self.daily_work())
         self.weekly_timer.timeout.connect(lambda: {
@@ -91,7 +91,7 @@ class AppWindow(QMainWindow):
             self.timer.stop(),
             self.timer_process_user(0),
             # timing至第二天0300
-            self.clear_timer.start((115200 - QDateTime.currentDateTime() % 86400) * 1000)
+            self.clear_timer.start((115200 - QDateTime.currentDateTime().toTime_t() % 86400) * 1000)
         })
         self.clear_timer.timeout.connect(lambda: {
             # 每天0300

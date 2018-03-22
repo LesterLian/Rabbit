@@ -11,14 +11,14 @@ import traceback
 import sys
 
 
-class Director():
+class Director:
 
     def __init__(self, user):
         self.user = user
         self.next_step = 'login'
         self.wrong_num = 0
         self.tag = False
-        self.wrong_info = []
+        self.wrong_info = set()
         # TODO decide where to create and close log
         self.log = Log()
         self.log.log('Running ' + self.user.data['phone'])
@@ -29,11 +29,12 @@ class Director():
                 self.do_post()
             # self.get_field_info()
         except Exception as err:
-            traceback.print_exception(*sys.exc_info())
-            self.log.log('\n----- Unexpected Error-----\n' +
-                         err.__str__() +
-                         '\n----- End -----'
-                         )
+            # TODO check if need \n, then delete
+            # traceback.print_exception(*sys.exc_info())
+            self.log.log('\n----- Unexpected Error-----\n')
+            for line in traceback.TracebackException(*sys.exc_info()).format():
+                self.log.log(line)
+            self.log.log('\n----- End -----')
             self.log.close()
             exit(1)
         # TODO check
@@ -66,7 +67,7 @@ class Director():
         # TODO 确保没有多余和重复wrong_info
         if not post_obj.wrong_info == '':
             self.wrong_num += 1
-            self.wrong_info.append(post_obj.wrong_info)
+            self.wrong_info.add(post_obj.wrong_info)
         # sleep
 
         # if self.next_step == 'login':
