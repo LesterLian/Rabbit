@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Time    : 3/19/18 11:27 PM
 # @Author  : Lester
+from random import random
 
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal, QDateTime
 from director import Director
 from user import User
 from time import sleep
@@ -15,6 +16,10 @@ class MyThread(QThread):
     def __init__(self):
         super(QThread, self).__init__()
         self.user_list = list()
+        self.row_list = list()
+        self.time_13 = QDateTime.currentMSecsSinceEpoch
+        self.umdata = '55F3A8BFC9C50DDA0BF4F5885309114E4F580F48901DFF2E4652E742C5BA980A' \
+                 '8762F994C904B080CD43AD3E795C914CDD6A3678EC26188D30D2F312FA2524DD'
 
     def __del__(self):
         self.wait()
@@ -22,9 +27,12 @@ class MyThread(QThread):
     def pass_user_list(self, users):
         self.user_list = users
 
+    def pass_row_list(self, rows):
+        self.row_list = rows
+
     def run(self):
         print('run')
-        for row in range(len(self.user_list)):
+        for row in self.row_list:
             print('printing', str(row))
             user = self.user_list[row]
             # 跳过
@@ -34,7 +42,12 @@ class MyThread(QThread):
             # TODO afs_token
             # self.browser = Browser()
             # user.update({'afs_token': self.browser.afs_token})
-            user.update({'afs_token': ''})
+            token = '0#FFFF000000000179EABE' + \
+                    str(self.time_13()) + str(random())[-11:] + \
+                    str(self.time_13()) + str(random())[-3:] + \
+                    self.umdata
+            user.update({'afs_token': token})
+            # user.update({'afs_token': ''})
             director = Director(user)
             # 运行
             director.run()

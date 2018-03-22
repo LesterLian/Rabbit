@@ -54,7 +54,7 @@ class AppWindow(QMainWindow):
         # 每日清楚计时
         self.clear_timer = QTimer()
         # 网页
-        self.browser = Browser()
+        # self.browser = Browser()
         # 信号-槽
         # ximi edit
         # self.ui.popButton.clicked.connect(lambda: {self.child.exec_(), self.refresh_table()})
@@ -66,6 +66,7 @@ class AppWindow(QMainWindow):
         self.work.finished_signal.connect(lambda: self.ui.runButton.setDisabled(False))
         self.ui.runButton.clicked.connect(lambda: {
             self.work.pass_user_list(self.user_list),
+            self.work.pass_row_list(range(len(self.user_list))),
             self.work.start(),
             self.ui.runButton.setDisabled(True),
             print('runButton returned')
@@ -176,19 +177,21 @@ class AppWindow(QMainWindow):
 
     def timer_process_user(self, periodic):
         # periodic: 0: no timer, daily, weekly; 1: normal timer
-        new_user_list = list()
+        row_list = list()
 
         if periodic == 0:
             # 先下线 再上线
-            for user in self.user_list:
-                if user.get('isTop') == '0':
-                    new_user_list.append(user)
-        for user in self.user_list:
-            if user.get('isTop') == '1':
-                new_user_list.append(user)
+            for row in range(len(self.user_list)):
+                if self.user_list[row].get('isTop') == '0':
+                    row_list.append(row)
+        for row in range(len(self.user_list)):
+            if self.user_list[row].get('isTop') == '1':
+                row_list.append(row)
 
-        self.work.pass_user_list(new_user_list)
+        self.work.pass_user_list(self.user_list)
+        self.work.pass_row_list(row_list)
         self.work.start()
+        self.ui.runButton.setDisabled(True)
 
     def child_accept(self):
         flag = 1
