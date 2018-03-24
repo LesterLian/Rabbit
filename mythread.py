@@ -54,7 +54,8 @@ class MyThread(QThread):
                 user.update({'completed': '失败'})
                 print('Director failed')
             else:
-                completed = '完成' if director.wrong_info == [] else '未完成打扫' if director.wrong_info == set('打扫') else '失败'
+                completed = '完成' if not director.wrong_info else \
+                    ('未完成打扫' if director.wrong_info == set('打扫') else '失败')
                 user.update({'completed': completed})
             # 命令行回显
             if not director.wrong_info:

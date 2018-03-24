@@ -68,6 +68,7 @@ class GetFieldEggs(PostInterface):
         self.successful = True
         fields_list = self.user.get('fields')
 
+        # TODO check None
         for filed_info in fields_list:
             if filed_info['hasEgg'] == '1':
                 print('hasEgg')
