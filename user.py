@@ -19,7 +19,7 @@ class User:
         if self.has(field):
             return self.data[field]
         else:
-            # TODO change to ''
+            # TODO maybe change to ''
             return None
 
     def has(self, other_key):

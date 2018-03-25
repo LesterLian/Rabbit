@@ -37,7 +37,7 @@ class MyThread(QThread):
             if user.get('completed') == '完成' if user.has('completed') else False:
                 print('跳过')
                 continue
-            # TODO afs_token
+            # 生成 afs_token
             # self.browser = Browser()
             # user.update({'afs_token': self.browser.afs_token})
             token = '0#FFFF000000000179EABE' + \

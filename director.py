@@ -64,7 +64,7 @@ class Director:
             return
 
         self.next_step = post_obj.next_step
-        # TODO 确保没有多余和重复wrong_info
+
         if not post_obj.wrong_info == '':
             self.wrong_num += 1
             self.wrong_info.add(post_obj.wrong_info)
@@ -145,7 +145,7 @@ class Director:
     #                 post_obj = Post('cleanFriend', post_dict)
     #                 # self.sleep()
     #                 if not post_obj.success:
-    #                     # todo 重写错误信息格式
+    #                     # 重写错误信息格式
     #                     # self.wrong_info.append('clean_friend')
     #                     print('--------------error--------------')
     #                     print(post_obj.response_json)
@@ -197,7 +197,7 @@ class Director:
     #                     egg_count = int(float(self.user.data['eggCount']) - add_count)
     #                 else:
     #                     self.wrong_info.append('hatch_field: ' + filed_info.get('id'))
-    #     self.next_step = 'end'  # todo 下一步是啥
+    #     self.next_step = 'end'  # 下一步是啥
     #
     # # 获取/更新 信息
     # def get_field_info(self):

@@ -72,7 +72,7 @@ class Post:
             for key in self.return_keys:
                 self.response_dic[key] = self.tmp_dic[key]
 
-    def json2dic(self, json):  # TODO Maybe put repeated info into set instead of updating them.
+    def json2dic(self, json):  # Maybe put repeated info into set instead of updating them.
         for key, val in json.items():
             if isinstance(val, dict):
                 self.json2dic(val)

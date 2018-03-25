@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : Lester
 
-from post.post import Post
-from post.manager import Manager
+from depreciated.manager import Manager
 from user import User
 from director import Director
 import global_var as gv

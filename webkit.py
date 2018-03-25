@@ -32,7 +32,7 @@ class Browser(QWebEngineView):
         # self.pushButton.setGeometry(QRect(0, 0, 56, 21))
         # self.pushButton.setObjectName("pushButton")
         # self.pushButton.setText("Push")
-        # self.pushButton.clicked.connect(lambda: self.get_token())
+        # self.pushButton.clicked.connect(lambda: self.page.runJavaScript('document.cookie', lambda r: print(r)))
 
     def run_js(self):
         self.page.runJavaScript('pointman.getConfig().token', lambda r: self.process_token(r))

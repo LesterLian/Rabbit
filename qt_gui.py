@@ -120,7 +120,7 @@ class AppWindow(QMainWindow):
     #     if user.get('completed') == '完成' if user.has('completed') else False:
     #         print('跳过')
     #         return
-    #     # TODO afs_token
+    #     # afs_token
     #     # self.browser = Browser()
     #     # user.data['afs_token'] = self.browser.get_token()
     #     user.update({'afs_token': self.browser.afs_token})
@@ -133,7 +133,7 @@ class AppWindow(QMainWindow):
     #         user.update({'completed': '失败'})
     #         print('Director failed')
     #     # print(director.user.data)
-    #     # TODO Encapsulate
+    #     # Encapsulate
     #     completed = '完成' if director.wrong_info == [] else '未完成打扫' if director.wrong_info == ['打扫'] else '失败'
     #     self.ui.table.setItem(row, 1, QTableWidgetItem(completed))
     #     user.update({'completed': completed})

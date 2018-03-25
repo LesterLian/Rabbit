@@ -132,10 +132,10 @@ class Ui_MainWindow(object):
     #     self.user_file = open('user', 'w')
     #     for passport in self.passport_list:
     #         self.user_file.write(passport['phone'] + ' ' + passport['pwd'] + '\n')
-    #         # TODO delete
+    #         # delete
     #         # print(passport['phone'] + ' ' + passport['pwd'])
     #     self.user_file.close()
-    #     # TODO delete
+    #     # delete
     #     # print(rows)
     #     return
 
