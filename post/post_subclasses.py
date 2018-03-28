@@ -68,15 +68,13 @@ class GetFieldEggs(PostInterface):
         self.successful = True
         fields_list = self.user.get('fields')
 
+        # TODO check None
         for filed_info in fields_list:
             if filed_info['hasEgg'] == '1':
                 print('hasEgg')
                 self.post_dict['fieldId'] = filed_info.get('id')
                 self.post_obj = Post('getFieldEggs', self.post_dict)
                 self.check()
-
-        # TODO check logic
-        # sleep
 
     def success(self):
         self.next_step = 'cleanFriend'
@@ -119,8 +117,6 @@ class HatchField(PostInterface):
                         self.log.log(self.post_obj)
                     else:
                         egg_count -= add_count
-        # TODO check logic
-        # sleep
 
     def success(self):
         self.next_step = 'end'  # todo 下一步是啥

@@ -45,7 +45,7 @@ def press(btn_name):
         app.clearListBox("处理结果")
         for passport in passport_list:
             run(passport)
-        # TODO delete
+        # delete
         print('-------结束----------')
         app.enableButton('开始')
 
@@ -56,7 +56,7 @@ def run(passport):
     user.update(passport)
     director = Director(user)
     director.run()
-    # TODO delete
+    # delete
     print(director.user.data)
     if director.wrong_info == []:
         passport = director.user.data['phone'] + ": " + "成功" + \
@@ -96,7 +96,7 @@ except FileNotFoundError:
 show_info = []
 for item in passport_list:
     show_info.append(item['phone'])
-# TODO delete
+# delete
 print(show_info)
 app.addListBox('账户信息', show_info, 0, 0, 1, 3)
 app.addListBox('处理结果', [], 0, 1, 3, 3)
@@ -119,4 +119,4 @@ app.stopSubWindow()
 
 app.go()
 
-# todo 修改帐号功能
+# 修改帐号功能

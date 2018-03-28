@@ -31,15 +31,13 @@ class MyThread(QThread):
         self.row_list = rows
 
     def run(self):
-        print('run')
         for row in self.row_list:
-            print('printing', str(row))
             user = self.user_list[row]
             # 跳过
             if user.get('completed') == '完成' if user.has('completed') else False:
                 print('跳过')
                 continue
-            # TODO afs_token
+            # 生成 afs_token
             # self.browser = Browser()
             # user.update({'afs_token': self.browser.afs_token})
             token = '0#FFFF000000000179EABE' + \
@@ -56,7 +54,8 @@ class MyThread(QThread):
                 user.update({'completed': '失败'})
                 print('Director failed')
             else:
-                completed = '完成' if director.wrong_info == [] else '未完成打扫' if director.wrong_info == ['打扫'] else '失败'
+                completed = '完成' if not director.wrong_info else \
+                    ('未完成打扫' if director.wrong_info == set('打扫') else '失败')
                 user.update({'completed': completed})
             # 命令行回显
             if not director.wrong_info:

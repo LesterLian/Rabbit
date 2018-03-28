@@ -11,14 +11,14 @@ import traceback
 import sys
 
 
-class Director():
+class Director:
 
     def __init__(self, user):
         self.user = user
         self.next_step = 'login'
         self.wrong_num = 0
         self.tag = False
-        self.wrong_info = []
+        self.wrong_info = set()
         # TODO decide where to create and close log
         self.log = Log()
         self.log.log('Running ' + self.user.data['phone'])
@@ -29,11 +29,12 @@ class Director():
                 self.do_post()
             # self.get_field_info()
         except Exception as err:
-            traceback.print_exception(*sys.exc_info())
-            self.log.log('\n----- Unexpected Error-----\n' +
-                         err.__str__() +
-                         '\n----- End -----'
-                         )
+            # TODO check if need \n, then delete
+            # traceback.print_exception(*sys.exc_info())
+            self.log.log('\n----- Unexpected Error-----\n')
+            for line in traceback.TracebackException(*sys.exc_info()).format():
+                self.log.log(line)
+            self.log.log('\n----- End -----')
             self.log.close()
             exit(1)
         # TODO check
@@ -63,10 +64,10 @@ class Director():
             return
 
         self.next_step = post_obj.next_step
-        # TODO 确保没有多余和重复wrong_info
+
         if not post_obj.wrong_info == '':
             self.wrong_num += 1
-            self.wrong_info.append(post_obj.wrong_info)
+            self.wrong_info.add(post_obj.wrong_info)
         # sleep
 
         # if self.next_step == 'login':
@@ -144,7 +145,7 @@ class Director():
     #                 post_obj = Post('cleanFriend', post_dict)
     #                 # self.sleep()
     #                 if not post_obj.success:
-    #                     # todo 重写错误信息格式
+    #                     # 重写错误信息格式
     #                     # self.wrong_info.append('clean_friend')
     #                     print('--------------error--------------')
     #                     print(post_obj.response_json)
@@ -196,7 +197,7 @@ class Director():
     #                     egg_count = int(float(self.user.data['eggCount']) - add_count)
     #                 else:
     #                     self.wrong_info.append('hatch_field: ' + filed_info.get('id'))
-    #     self.next_step = 'end'  # todo 下一步是啥
+    #     self.next_step = 'end'  # 下一步是啥
     #
     # # 获取/更新 信息
     # def get_field_info(self):

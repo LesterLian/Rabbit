@@ -1,17 +1,25 @@
 # Rabbit
 Personal project practicing Python http POST.
 
-# Todo List
-- 多线程
+# To-do List
 - 总数
 - 排序
 - 右键行为
 
 # Update Log
 
+--- 0.0.4 ---
+
+多线程实现，开始按钮开始新线程
+
+由于运行在另一线程，表格可以实时更新
+
+本地计算token
+
 --- 0.0.3 ---
 
 修复添加后的用户不能马上运行
+
 修复添加窗口默认高亮
 
 --- 0.0.2 ---

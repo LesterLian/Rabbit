@@ -27,11 +27,11 @@ class Post:
     def post(self):
         url = gv.url + self.command
         data = self.make_data(self.warp_dic(self.post_dict))
-        # TODO maybe move.
+
         try:
             response_temp = requests.post(url, data=data, headers=gv.headers, timeout=20)
             # TODO delete
-            print('data: ', data)
+            print('data:', data)
             # print(response_temp)
             try:
                 response_temp.json()
